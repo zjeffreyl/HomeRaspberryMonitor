@@ -12,7 +12,7 @@ public class ServerReport {
     private double ping;
     private Timestamp recordedAt;
 
-    ServerReport(Long id, double download, double upload, double ping, Timestamp recordedAt)
+    public ServerReport(Long id, double download, double upload, double ping, Timestamp recordedAt)
     {
         this.download = download;
         this.upload = upload;
@@ -29,19 +29,21 @@ public class ServerReport {
         this.id = id;
     }
 
-    double getDownload() {
+    public Long getId() { return id; }
+
+    public double getDownload() {
         return download;
     }
 
-    double getUpload() {
+    public double getUpload() {
         return upload;
     }
 
-    double getPing() {
+    public double getPing() {
         return ping;
     }
 
-    Timestamp getTimestamp()
+    public Timestamp getTimestamp()
     {
         return recordedAt;
     }
