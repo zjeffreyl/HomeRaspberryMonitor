@@ -1,48 +1,69 @@
 package com.example.model;
 
 import java.sql.Timestamp;
+import org.springframework.data.annotation.Id;
 
 public class ServerReport {
+
+    @Id
+    private Long id;
     private double download;
     private double upload;
     private double ping;
-    private Timestamp timestamp;
+    private Timestamp recordedAt;
 
-    public double getDownload() {
+    ServerReport(Long id, double download, double upload, double ping, Timestamp recordedAt)
+    {
+        this.download = download;
+        this.upload = upload;
+        this.ping = ping;
+        this.recordedAt = recordedAt;
+    }
+
+    public static ServerReport create(double download, double upload, double ping, Timestamp recordedAt)
+    {
+        return new ServerReport(null, download, upload, ping, recordedAt);
+    }
+
+    void setId(Long id) {
+        this.id = id;
+    }
+
+    double getDownload() {
         return download;
     }
 
-    public double getUpload() {
+    double getUpload() {
         return upload;
     }
 
-    public double getPing() {
+    double getPing() {
         return ping;
     }
 
-    public Timestamp getTimestamp()
+    Timestamp getTimestamp()
     {
-        return timestamp;
+        return recordedAt;
     }
 
-    public void setDownload(double download) {
+    void setDownload(double download) {
         this.download = download;
     }
 
-    public void setPing(double ping) {
+    void setPing(double ping) {
         this.ping = ping;
     }
 
-    public void setUpload(double upload) {
+    void setUpload(double upload) {
         this.upload = upload;
     }
 
-    public void setTimestamp(Timestamp timestamp) {
-        this.timestamp = timestamp;
+    void setTimestamp(Timestamp recordedAt) {
+        this.recordedAt = recordedAt;
     }
 
     @Override
     public String toString() {
-        return "Server Report at " + timestamp.toString()+ " [download=" + download + ", upload=" + upload + ", ping= " + ping + "]";
+        return "Server Report at " + recordedAt.toString()+ " [download=" + download + ", upload=" + upload + ", ping= " + ping + "]";
     }
 }

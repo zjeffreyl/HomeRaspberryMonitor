@@ -1,39 +1,47 @@
 package com.example;
 
 import com.example.model.ServerReport;
-import com.example.service.ServerReportService;
-import org.springframework.context.ApplicationContext;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.repository.ServerReportsRepository;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.context.annotation.Bean;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @SpringBootApplication
 public class HomeRaspberryMonitorApplication {
 
-	@Autowired
-	ServerReportService serverReportService;
-
 	public static void main(String[] args) {
-		ApplicationContext context = SpringApplication.run(HomeRaspberryMonitorApplication.class, args);
-		ServerReportService serverReportService = context.getBean(ServerReportService.class);
-
-		ServerReport report = new ServerReport();
-		report.setDownload(984.2314);
-		report.setUpload(89321.34);
-		report.setPing(23);
-		report.setTimestamp(new Timestamp(1000000));
-		serverReportService.insertServerReport(report);
+		SpringApplication.run(HomeRaspberryMonitorApplication.class, args);
 	}
-	@GetMapping
-	@ResponseBody
-	public String currentUserName(Authentication authentication) {
-		DefaultOidcUser userDetails = (DefaultOidcUser) authentication.getPrincipal();
-		return "Hello, " + userDetails.getFullName();
+
+	@Bean
+	ApplicationRunner applicationRunner(ServerReportsRepository serverReportRepository)
+	{
+		return args -> {
+			ServerReport report = ServerReport.create(3000.1233, 98,12, createTimeStampFromString("23/09/2007"));
+			ServerReport report1 = ServerReport.create(3000.1233, 98,12, createTimeStampFromString("24/09/2007"));
+			System.out.println("------" + serverReportRepository.save(report));
+			System.out.println("------" + serverReportRepository.save(report1));
+			System.out.println("------" + serverReportRepository.findByTimeStamp(createTimeStampFromString("23/09/2007")));
+		};
+	}
+
+	public Timestamp createTimeStampFromString(String str)
+	{
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		Date date = null;
+		try {
+			date = dateFormat.parse(str);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		long time = date.getTime();
+		return new Timestamp(time);
 	}
 }

@@ -1,9 +1,10 @@
 DROP TABLE IF EXISTS server_report;
 
 CREATE TABLE server_report (
-  serverReportId int NOT NULL PRIMARY KEY,
+  id BIGINT NOT NULL AUTO_INCREMENT,
   download DOUBLE NOT NULL,
   upload DOUBLE NOT NULL,
   ping DOUBLE NOT NULL,
-  recordedAt TIMESTAMP NOT NULL
+  recorded_at TIMESTAMP NOT NULL,
+  PRIMARY KEY (id)
 );
