@@ -2,6 +2,8 @@ package com.example.model;
 
 import java.sql.Timestamp;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotNull;
 
@@ -18,7 +20,7 @@ public class ServerReport {
                         @JsonProperty("download") double download,
                         @JsonProperty("upload") double upload,
                         @JsonProperty("ping") double ping,
-                        @JsonProperty("recorded_at") Timestamp recordedAt)
+                        @JsonProperty("recorded_at") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSS") Timestamp recordedAt)
     {
         this.id = id;
         this.download = download;

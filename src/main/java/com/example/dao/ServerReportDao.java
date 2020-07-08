@@ -19,5 +19,7 @@ public interface ServerReportDao {
 
     int deleteServerReportById(UUID id);
 
+    int updateServerReportById(UUID id, ServerReport serverReport);
+
     Optional<ServerReport> selectServerReportById(UUID id);
 }

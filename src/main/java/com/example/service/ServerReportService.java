@@ -8,18 +8,38 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ServerReportService {
-    private final ServerReportDataAccessService serverReportDataAccessService;
+    private final ServerReportDao serverReportDao;
 
     @Autowired
-    public ServerReportService(@Qualifier("postgres") ServerReportDataAccessService serverReportDataAccessService) {
-        this.serverReportDataAccessService = serverReportDataAccessService;
+    public ServerReportService(@Qualifier("postgres") ServerReportDao serverReportDao) {
+        this.serverReportDao = serverReportDao;
     }
 
     public List<ServerReport> getAllServerReports()
     {
-        return serverReportDataAccessService.selectAllServerReports();
+        return serverReportDao.selectAllServerReports();
+    }
+
+    public int insertServerReport(ServerReport report) {
+        return serverReportDao.insertServerReport(report); }
+
+    public Optional<ServerReport> getServerReportsById(UUID id)
+    {
+        return serverReportDao.selectServerReportById(id);
+    }
+
+    public int deleteServerReportById(UUID id)
+    {
+        return serverReportDao.deleteServerReportById(id);
+    }
+
+    public int updateServerReportById(UUID id, ServerReport report)
+    {
+        return serverReportDao.updateServerReportById(id, report);
     }
 }
