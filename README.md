@@ -27,4 +27,6 @@ Open and get dependencies.
 Mapping is:
 localhost:8080/api/serverReport/<id>
 
-Okta login is disabled.
+Okta login is disable, however with it it looks like:
+
+![demo video](images/demo.gif)
