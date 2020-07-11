@@ -1,6 +1,6 @@
-#okta:
-#  oauth2:
-#    issuer: https://dev-536052.okta.com/oauth2/default
+okta:
+  oauth2:
+    issuer: https://dev-536052.okta.com/oauth2/default
 app:
   datasource:
     jdbc-url: jdbc:postgresql://localhost:5432/postgresdb
