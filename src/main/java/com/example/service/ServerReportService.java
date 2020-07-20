@@ -16,7 +16,7 @@ public class ServerReportService {
     private final ServerReportDao serverReportDao;
 
     @Autowired
-    public ServerReportService(@Qualifier("postgres") ServerReportDao serverReportDao) {
+    public ServerReportService(@Qualifier("postgres-serverReport") ServerReportDao serverReportDao) {
         this.serverReportDao = serverReportDao;
     }
 

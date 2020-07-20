@@ -6,12 +6,11 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Types;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Repository("postgres")
+@Repository("postgres-serverReport")
 public class ServerReportDataAccessService implements ServerReportDao{
     private final JdbcTemplate jdbcTemplate;
 
