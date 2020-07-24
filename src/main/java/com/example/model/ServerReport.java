@@ -13,6 +13,7 @@ public class ServerReport {
     private double download;
     private double upload;
     private double ping;
+    private final UUID reportRecordId;
     @NotNull
     private Timestamp recordedAt;
 
@@ -20,12 +21,15 @@ public class ServerReport {
                         @JsonProperty("download") double download,
                         @JsonProperty("upload") double upload,
                         @JsonProperty("ping") double ping,
-                        @JsonProperty("recorded_at") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSS") Timestamp recordedAt)
+                        @JsonProperty("recorded_at") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSS") Timestamp recordedAt,
+                        @JsonProperty("report_record_id") UUID reportRecordId
+    )
     {
         this.id = id;
         this.download = download;
         this.upload = upload;
         this.ping = ping;
+        this.reportRecordId = reportRecordId;
         this.recordedAt = recordedAt;
     }
 
@@ -48,8 +52,10 @@ public class ServerReport {
         return recordedAt;
     }
 
+    public UUID getReportRecordId() { return reportRecordId; }
+
     @Override
     public String toString() {
-        return "Server Report " + id.toString() + " at " + recordedAt.toString()+ " [download=" + download + ", upload=" + upload + ", ping= " + ping + "]";
+        return "Server Report " + id.toString() + " at " + recordedAt.toString()+ " [download=" + download + ", upload=" + upload + ", ping= " + ping + "] +  from " + reportRecordId;
     }
 }
