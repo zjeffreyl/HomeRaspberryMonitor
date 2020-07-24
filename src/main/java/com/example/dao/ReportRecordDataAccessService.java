@@ -66,7 +66,7 @@ public class ReportRecordDataAccessService implements ReportRecordDao{
 
     @Override
     public int updateReportRecordById(UUID id, ReportRecord reportRecord) {
-        final String sql = "UPDATE report_record SET start_time = ?, end_time = ?, server = ?, interval_in_minutes = ? WHERE id = " + id;
+        final String sql = "UPDATE report_record SET start_time = ?, end_time = ?, server = ?, interval_in_minutes = ? WHERE id = \'" + id + "\'";
         try
         {
             jdbcTemplate.update(sql, new Object[] {reportRecord.getStartTime(), reportRecord.getEndTime(), reportRecord.getServer(), reportRecord.getIntervalInMinutes()});
@@ -74,6 +74,7 @@ public class ReportRecordDataAccessService implements ReportRecordDao{
         }
         catch(DataAccessException exc)
         {
+            System.out.println(exc.toString());
             return 0;
         }
     }

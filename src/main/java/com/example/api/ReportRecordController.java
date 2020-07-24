@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/reportRecord")
+@RequestMapping("/api/reportRecord/")
 public class ReportRecordController {
     private ReportRecordService reportRecordService;
 
@@ -44,7 +44,7 @@ public class ReportRecordController {
         return reportRecordService.deleteReportRecordById(id);
     }
 
-    @PutMapping(path = {"id"})
+    @RequestMapping(value = "{id}", produces = "application/json",  method=RequestMethod.PUT)
     public int updateServerReportById(@PathVariable("id") @Valid @NotNull UUID id, @RequestBody ReportRecord reportRecord)
     {
         return reportRecordService.updateReportRecordById(id, reportRecord);

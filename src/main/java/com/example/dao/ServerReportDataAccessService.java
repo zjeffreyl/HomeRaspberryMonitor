@@ -65,7 +65,7 @@ public class ServerReportDataAccessService implements ServerReportDao{
 
     @Override
     public int updateServerReportById(UUID id, ServerReport serverReport) {
-        final String sql = "UPDATE server_report SET download = ?, upload = ?, ping = ?, timestamp = ? WHERE id = " + id;
+        final String sql = "UPDATE server_report SET download = ?, upload = ?, ping = ?, timestamp = ? WHERE id = " + "\'" + id + "\'";
         try
         {
             jdbcTemplate.update(sql, new Object[] {serverReport.getDownload(), serverReport.getUpload(), serverReport.getPing(), serverReport.getTimestamp()});
@@ -73,6 +73,7 @@ public class ServerReportDataAccessService implements ServerReportDao{
         }
         catch(DataAccessException exc)
         {
+            System.out.println(exc.toString());
             return 0;
         }
     }

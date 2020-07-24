@@ -48,7 +48,7 @@ public class ServerReportController {
                 return serverReportService.deleteServerReportById(id);
         }
 
-        @PutMapping(path = {"id"})
+        @RequestMapping(value = "{id}", produces = "application/json",  method=RequestMethod.PUT)
         public int updateServerReportById(@PathVariable("id") @Valid @NotNull UUID id, @RequestBody ServerReport report)
         {
                 return serverReportService.updateServerReportById(id, report);
