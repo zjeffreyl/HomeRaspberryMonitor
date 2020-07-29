@@ -21,7 +21,7 @@ public class ServerReport {
                         @JsonProperty("download") double download,
                         @JsonProperty("upload") double upload,
                         @JsonProperty("ping") double ping,
-                        @JsonProperty("recorded_at") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSS") Timestamp recordedAt,
+                        @JsonProperty("recorded_at") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS") Timestamp recordedAt,
                         @JsonProperty("report_record_id") UUID reportRecordId
     )
     {

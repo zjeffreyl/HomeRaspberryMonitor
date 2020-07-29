@@ -1,5 +1,5 @@
 CREATE TABLE server_report (
-    id UUID NOT NULL PRIMARY KEY,
+    id UUID PRIMARY KEY,
     download NUMERIC NOT NULL,
     upload NUMERIC NOT NULL,
     ping NUMERIC NOT NULL,

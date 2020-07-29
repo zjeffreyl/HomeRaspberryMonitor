@@ -1,16 +1,22 @@
-CREATE OR REPLACE FUNCTION report_records_notify_func()
-RETURNS trigger AS
-$BODY$
-
+CREATE OR REPLACE FUNCTION report_records_notify_func() RETURNS trigger AS $$
+DECLARE
+    payload text;
 BEGIN
-PERFORM pg_notify('report_records_updates', NEW.ID::text);
+    IF TG_OP = 'DELETE' THEN
+        payload := row_to_json(tmp)::text FROM (
+            SELECT OLD.id as id,
+            TG_OP as _op
+        ) tmp;
+    else
+       payload := row_to_json(tmp)::text FROM (
+            SELECT NEW.*,
+            TG_OP as _op
+       ) tmp;
+    END IF;
+PERFORM pg_notify('report_records_updates', payload);
 RETURN NEW;
 END;
-$BODY$
-LANGUAGE plpgsql VOLATILE
-COST 100;
-ALTER FUNCTION report_records_notify_func()
-OWNER TO postgres;
+$$ LANGUAGE plpgsql;
 
 CREATE TRIGGER add_report_records_event
 AFTER INSERT or UPDATE or DELETE

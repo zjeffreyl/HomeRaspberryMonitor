@@ -25,6 +25,7 @@ public class ReportRecordDataAccessService implements ReportRecordDao{
     public int insertReportRecord(UUID id, ReportRecord reportRecord) {
         String sql = "INSERT INTO report_record VALUES (?, ?, ?, ?, ?)";
         Object[] params = new Object[]{id, reportRecord.getStartTime(), reportRecord.getEndTime(), reportRecord.getServer(), reportRecord.getIntervalInMinutes()};
+        System.out.println("Intervals: " + reportRecord.getIntervalInMinutes());
         try {
             jdbcTemplate.update(sql, params);
             return 1;
