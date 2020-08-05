@@ -1,0 +1,13 @@
+/home/jeffrey/HomeRaspberryMonitor/HomeRaspberryMonitor/webapp/src/main/java/com/example/dao/ReportRecordDao.java
+/home/jeffrey/HomeRaspberryMonitor/HomeRaspberryMonitor/webapp/src/main/java/com/example/api/HomeController.java
+/home/jeffrey/HomeRaspberryMonitor/HomeRaspberryMonitor/webapp/src/main/java/com/example/dao/ServerReportDao.java
+/home/jeffrey/HomeRaspberryMonitor/HomeRaspberryMonitor/webapp/src/main/java/com/example/service/ReportRecordService.java
+/home/jeffrey/HomeRaspberryMonitor/HomeRaspberryMonitor/webapp/src/main/java/com/example/HomeRaspberryMonitorApplication.java
+/home/jeffrey/HomeRaspberryMonitor/HomeRaspberryMonitor/webapp/src/main/java/com/example/datasource/PostgresDatasource.java
+/home/jeffrey/HomeRaspberryMonitor/HomeRaspberryMonitor/webapp/src/main/java/com/example/dao/ServerReportDataAccessService.java
+/home/jeffrey/HomeRaspberryMonitor/HomeRaspberryMonitor/webapp/src/main/java/com/example/model/ServerReport.java
+/home/jeffrey/HomeRaspberryMonitor/HomeRaspberryMonitor/webapp/src/main/java/com/example/model/ReportRecord.java
+/home/jeffrey/HomeRaspberryMonitor/HomeRaspberryMonitor/webapp/src/main/java/com/example/api/ServerReportController.java
+/home/jeffrey/HomeRaspberryMonitor/HomeRaspberryMonitor/webapp/src/main/java/com/example/service/ServerReportService.java
+/home/jeffrey/HomeRaspberryMonitor/HomeRaspberryMonitor/webapp/src/main/java/com/example/api/ReportRecordController.java
+/home/jeffrey/HomeRaspberryMonitor/HomeRaspberryMonitor/webapp/src/main/java/com/example/dao/ReportRecordDataAccessService.java

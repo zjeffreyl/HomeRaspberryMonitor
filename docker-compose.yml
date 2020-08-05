@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  raspberry-postgres:
+    image: "postgres:9.6-alpine"
+    container_name: raspberry-postgres-container
+    volumes:
+      - ./pg-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=postgresdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+  web-app:
+    build: ./webapp
+    container_name: raspberry-web-app-container
+    environment:
+      - DB_SERVER=raspberry-postgres
+      - POSTGRES_DB=postgresdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - 8080:8080
+    links:
+      - raspberry-postgres
+
+

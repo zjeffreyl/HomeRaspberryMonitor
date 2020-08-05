@@ -65,6 +65,7 @@
 		</repository>
 	</repositories>
 	<build>
+		<finalName>app.jar</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
