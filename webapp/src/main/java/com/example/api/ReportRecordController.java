@@ -1,4 +1,4 @@
-package com.example.api;
+package main.java.com.example.api;
 
 import com.example.model.ReportRecord;
 import com.example.service.ReportRecordService;
