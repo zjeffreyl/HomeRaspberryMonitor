@@ -1,43 +1,42 @@
 version: "3"
 
 services:
+  raspberry-postgres:
+    image: "postgres:9.6-alpine"
+    container_name: raspberry-postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=postgresdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - PGDATA=/tmp
+    restart: always
+
+  raspberry-python-app:
+    build: ./python-app/
+    container_name: raspberry-python-container
+    image: raspberry-python-container
+    environment:
+      - USER=root
+      - "PYTHONUNBUFFERED=1"
+      - POSTGRES_DB=postgresdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - DB_SERVER=raspberry-postgres
+    depends_on:
+      - raspberry-postgres
+    restart: always
+
   web-app:
     build: ./webapp
-    container_name: raspberry-web-app-container
+    container_name: raspberry-web-app
     environment:
       - DB_SERVER=raspberry-postgres
       - POSTGRES_DB=postgresdb
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
     ports:
-      - "8080:8080"
-    links:
-      - raspberry-postgres
+      - 8080:8080
     depends_on:
       - raspberry-postgres
-  raspberry-python-app:
-    build: ./python-app/
-    container_name: raspberry-python-container
-    image: raspberry-python-container
-    depends_on:
-      - raspberry-postgres
-  raspberry-postgres:
-    build: ./raspberry-postgresql-app/
-    container_name: raspberry-postgres-container
-    image: raspberry-postgres-container
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_DB=postgresdb
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-    networks:
-      node_net:
-        ipv4_address: 172.28.1.4
-networks:
-  node_net:
-    ipam:
-      driver: default
-      config:
-        - subnet: 172.28.0.0/16
-
