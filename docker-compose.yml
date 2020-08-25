@@ -6,6 +6,8 @@ services:
     container_name: raspberry-postgres
     ports:
       - 5432:5432
+    volumes:
+      - pg-data:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=postgresdb
       - POSTGRES_USER=postgres
@@ -24,8 +26,10 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
       - DB_SERVER=raspberry-postgres
+      - SERVER=raspberry-web-app
     depends_on:
       - raspberry-postgres
+      - web-app
     restart: always
 
   web-app:
@@ -40,3 +44,6 @@ services:
       - 8080:8080
     depends_on:
       - raspberry-postgres
+    restart: always
+volumes:
+  pg-data:

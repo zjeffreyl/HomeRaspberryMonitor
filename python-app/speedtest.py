@@ -6,11 +6,10 @@ import json
 import datetime
 import requests
 
-URL = "http://localhost:8080/api/serverReport/"
-
+URL = "http://raspberry-web-app:8080/api/serverReport/"
+speedtest = "speedtest-cli"
 
 def main(argv):
-    print("Here")
     recorded_at = datetime.datetime.now()
     print(recorded_at.strftime("%Y-%m-%-d %-H:%-M:%-S.%f"))
     if len(argv) != 1:
@@ -18,7 +17,7 @@ def main(argv):
         return
     report_record_id = argv[0]
 
-    response = subprocess.check_output("speedtest-cli --json", shell=True)
+    response = subprocess.check_output("{} --json".format(speedtest), shell=True)
     response = json.loads(str(response.decode()))
     data_obj = {
         'download': response['download'],
