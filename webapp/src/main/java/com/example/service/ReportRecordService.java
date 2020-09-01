@@ -2,7 +2,6 @@ package com.example.service;
 
 import com.example.dao.ReportRecordDao;
 import com.example.model.ReportRecord;
-import com.example.model.ServerReport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

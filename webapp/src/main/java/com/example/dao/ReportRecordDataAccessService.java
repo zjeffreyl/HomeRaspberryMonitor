@@ -1,7 +1,6 @@
 package com.example.dao;
 
 import com.example.model.ReportRecord;
-import com.example.model.ServerReport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,9 +22,8 @@ public class ReportRecordDataAccessService implements ReportRecordDao{
 
     @Override
     public int insertReportRecord(UUID id, ReportRecord reportRecord) {
-        String sql = "INSERT INTO report_record VALUES (?, ?, ?, ?, ?)";
-        Object[] params = new Object[]{id, reportRecord.getStartTime(), reportRecord.getEndTime(), reportRecord.getServer(), reportRecord.getIntervalInMinutes()};
-        System.out.println("Intervals: " + reportRecord.getIntervalInMinutes());
+        String sql = "INSERT INTO report_record VALUES (?, ?, ?, ?, ?, ?)";
+        Object[] params = new Object[]{id, reportRecord.getName(), reportRecord.getStartTime(), reportRecord.getEndTime(), reportRecord.getServer(), reportRecord.getIntervalInMinutes()};
         try {
             jdbcTemplate.update(sql, params);
             return 1;
@@ -38,10 +36,11 @@ public class ReportRecordDataAccessService implements ReportRecordDao{
 
     @Override
     public List<ReportRecord> selectAllReportRecords() {
-        String sql = "SELECT id, start_time, end_time, server, interval_in_minutes FROM report_record";
+        String sql = "SELECT id, record_name, start_time, end_time, server, interval_in_minutes FROM report_record";
         List<ReportRecord> reportRecords = jdbcTemplate.query(sql, ((resultSet, i) -> {
             return new ReportRecord(
                     UUID.fromString(resultSet.getString("id")),
+                    resultSet.getString("record_name"),
                     resultSet.getTimestamp("start_time"),
                     resultSet.getTimestamp("end_time"),
                     resultSet.getString("server"),
@@ -67,10 +66,10 @@ public class ReportRecordDataAccessService implements ReportRecordDao{
 
     @Override
     public int updateReportRecordById(UUID id, ReportRecord reportRecord) {
-        final String sql = "UPDATE report_record SET start_time = ?, end_time = ?, server = ?, interval_in_minutes = ? WHERE id = \'" + id + "\'";
+        final String sql = "UPDATE report_record SET record_name = ?, start_time = ?, end_time = ?, server = ?, interval_in_minutes = ? WHERE id = \'" + id + "\'";
         try
         {
-            jdbcTemplate.update(sql, new Object[] {reportRecord.getStartTime(), reportRecord.getEndTime(), reportRecord.getServer(), reportRecord.getIntervalInMinutes()});
+            jdbcTemplate.update(sql, new Object[] {reportRecord.getName(), reportRecord.getStartTime(), reportRecord.getEndTime(), reportRecord.getServer(), reportRecord.getIntervalInMinutes()});
             return 1;
         }
         catch(DataAccessException exc)
@@ -86,6 +85,7 @@ public class ReportRecordDataAccessService implements ReportRecordDao{
         ReportRecord report = jdbcTemplate.queryForObject(sql, new Object[] {id}, ((resultSet, i) -> {
             return new ReportRecord(
                     UUID.fromString(resultSet.getString("id")),
+                    resultSet.getString("record_name"),
                     resultSet.getTimestamp("start_time"),
                     resultSet.getTimestamp("end_time"),
                     resultSet.getString("server"),
