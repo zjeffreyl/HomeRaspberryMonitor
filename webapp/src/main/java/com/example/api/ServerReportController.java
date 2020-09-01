@@ -2,7 +2,6 @@ package com.example.api;
 
 import com.example.model.ServerReport;
 import com.example.service.ServerReportService;
-import org.apache.catalina.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,14 +23,13 @@ public class ServerReportController {
 
         @GetMapping
         @CrossOrigin(origins = "http://localhost:3000")
-        Collection<ServerReport> serverReports() {
-                return (Collection<ServerReport>) serverReportService.getAllServerReports();
+        public Collection<ServerReport> serverReports() {
+                return serverReportService.getAllServerReports();
         }
 
         @PostMapping
         public int addServerReport(@RequestBody @Valid @NotNull ServerReport report)
         {
-                System.out.println("Adding: " + report.getPing());
                 return serverReportService.insertServerReport(report);
         }
 

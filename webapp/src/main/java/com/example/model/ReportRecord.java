@@ -13,8 +13,10 @@ public class ReportRecord {
     private Timestamp endTime;
     private String server;
     private int intervalInMinutes;
+    private String name;
 
     public ReportRecord(@JsonProperty("id") UUID id,
+                        @JsonProperty("record_name") String name,
                         @JsonProperty("start_time") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSS") Timestamp startTime,
                         @JsonProperty("end_time") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSS")Timestamp endTime,
                         @JsonProperty("server") String server,
@@ -26,6 +28,7 @@ public class ReportRecord {
         this.endTime = endTime;
         this.server = server;
         this.intervalInMinutes = intervalInMinutes;
+        this.name = name;
     }
 
     public UUID getId() { return id; }
@@ -48,6 +51,8 @@ public class ReportRecord {
     {
         return intervalInMinutes;
     }
+
+    public String getName() { return name; }
 
     @Override
     public String toString()
