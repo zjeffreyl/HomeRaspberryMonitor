@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Card, CardBody, Form, Button, Input } from "reactstrap";
 import CustomDropdown from "../functions/CustomDropdown";
+import axios from 'axios';
+
 class AddRecordCard extends Component {
   constructor(props) {
     super(props);
@@ -10,7 +12,16 @@ class AddRecordCard extends Component {
     this.state = {
       dropDownValue: "Select interval",
       dropDownOpen: false,
+      servers: []
     };
+  }
+
+  componentDidMount() {
+    axios.get("http://localhost:8080/api/server/").then(res => {
+      const servers = res.data;
+      this.setState({servers: servers});
+    })
+    console.log(this.state.servers)
   }
 
   toggle(e) {
@@ -41,8 +52,12 @@ class AddRecordCard extends Component {
             <h5>Add a new Record</h5>
             <Input type="text" placeholder="Record Name Optional" />
             <div>
+              <h6>Nearby Servers to test with</h6>
+              <CustomDropdown list={intervals} />
+            </div>
+            <div>
               <h6>Select an Interval</h6>
-              <CustomDropdown intervals={intervals} />
+              <CustomDropdown list={intervals} />
             </div>
             <br />
             <Button>Add Record</Button>

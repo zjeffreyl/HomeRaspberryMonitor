@@ -36,24 +36,24 @@ class RecordsView extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    <td>Item</td>
-                    <td>Item</td>
-                    <td>Item</td>
-                    <td>Item</td>
-                    <td>Item</td>
-                    <td>
-                      <Button>Delete</Button>
-                    </td>
+                    <tr>
+                      <td>Item</td>
+                      <td>Item</td>
+                      <td>Item</td>
+                      <td>Item</td>
+                      <td>Item</td>
+                      <td><Button>Delete</Button></td>
+                    </tr>
                   </tbody>
                   <tbody>
+                  <tr>
                     <td>Item</td>
                     <td>Item</td>
                     <td>Item</td>
                     <td>Item</td>
                     <td>Item</td>
-                    <td>
-                      <Button>Delete</Button>
-                    </td>
+                    <td><Button>Delete</Button></td>
+                    </tr>
                   </tbody>
                 </Table>
               </CardBody>

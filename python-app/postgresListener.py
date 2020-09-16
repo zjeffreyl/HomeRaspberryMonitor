@@ -6,6 +6,7 @@ import time
 import os
 import requests
 import json
+import serverfinder
 
 URL = "http://raspberry-web-app:8080/api/reportRecord/"
 HEALTH_URL = "http://raspberry-web-app:8080/actuator/health/"
@@ -78,6 +79,9 @@ conn = psycopg2.connect(user=os.environ['POSTGRES_USER'], database=os.environ['P
 
 conn.autocommit = True
 cursor = conn.cursor()
+
+# put all nearby servers into the database
+serverfinder.update_servers(cursor)
 
 # Remove all in crontab and put all in postgres db
 my_cron = CronTab(user=os.environ['USER'])

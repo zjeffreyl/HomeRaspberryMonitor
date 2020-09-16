@@ -15,8 +15,8 @@ const CustomDropdown = (props) => {
     <Dropdown isOpen={dropdownOpen} toggle={toggle}>
       <DropdownToggle caret>Dropdown</DropdownToggle>
       <DropdownMenu>
-        {props.intervals.map((interval) => (
-          <DropdownItem key={interval}>{interval}</DropdownItem>
+        {props.list.map((item, index) => (
+          <DropdownItem key={index}>{item}</DropdownItem>
         ))}
       </DropdownMenu>
     </Dropdown>
