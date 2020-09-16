@@ -36,14 +36,14 @@ public class ReportRecordDataAccessService implements ReportRecordDao{
 
     @Override
     public List<ReportRecord> selectAllReportRecords() {
-        String sql = "SELECT id, record_name, start_time, end_time, server, interval_in_minutes FROM report_record";
+        String sql = "SELECT id, record_name, start_time, end_time, server_id, interval_in_minutes FROM report_record";
         List<ReportRecord> reportRecords = jdbcTemplate.query(sql, ((resultSet, i) -> {
             return new ReportRecord(
                     UUID.fromString(resultSet.getString("id")),
                     resultSet.getString("record_name"),
                     resultSet.getTimestamp("start_time"),
                     resultSet.getTimestamp("end_time"),
-                    resultSet.getString("server"),
+                    resultSet.getInt("server_id"),
                     resultSet.getInt("interval_in_minutes")
             );
         }));
@@ -66,7 +66,7 @@ public class ReportRecordDataAccessService implements ReportRecordDao{
 
     @Override
     public int updateReportRecordById(UUID id, ReportRecord reportRecord) {
-        final String sql = "UPDATE report_record SET record_name = ?, start_time = ?, end_time = ?, server = ?, interval_in_minutes = ? WHERE id = \'" + id + "\'";
+        final String sql = "UPDATE report_record SET record_name = ?, start_time = ?, end_time = ?, server_id = ?, interval_in_minutes = ? WHERE id = \'" + id + "\'";
         try
         {
             jdbcTemplate.update(sql, new Object[] {reportRecord.getName(), reportRecord.getStartTime(), reportRecord.getEndTime(), reportRecord.getServer(), reportRecord.getIntervalInMinutes()});
@@ -88,7 +88,7 @@ public class ReportRecordDataAccessService implements ReportRecordDao{
                     resultSet.getString("record_name"),
                     resultSet.getTimestamp("start_time"),
                     resultSet.getTimestamp("end_time"),
-                    resultSet.getString("server"),
+                    resultSet.getInt("server_id"),
                     resultSet.getInt("interval_in_minutes")
             );
         }));

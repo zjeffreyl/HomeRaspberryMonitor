@@ -9,9 +9,3 @@ FROM openjdk:11.0.8-jdk
 COPY --from=build /workspace/target/*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","app.jar"]
-
-# FROM adoptopenjdk/openjdk11:latest
-# ARG JAR_FILE=target/app.jar
-# ADD ${JAR_FILE} app.jar
-# EXPOSE 8080
-# ENTRYPOINT ["java","-jar","/app.jar"]
