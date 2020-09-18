@@ -1,15 +1,7 @@
 import React, { Component } from "react";
 import AddRecordCard from "../components/AddRecordCard";
-import {
-  Row,
-  Col,
-  Table,
-  CardHeader,
-  Card,
-  CardBody,
-  CardTitle,
-  Button,
-} from "reactstrap";
+import AllRecordsCard from "../components/AllRecordsCard";
+import {Row, Col} from "reactstrap";
 class RecordsView extends Component {
   render() {
     return (
@@ -19,45 +11,7 @@ class RecordsView extends Component {
             <AddRecordCard />
           </Col>
           <Col>
-            <Card>
-              <CardHeader>
-                <CardTitle>Records</CardTitle>
-              </CardHeader>
-              <CardBody>
-                <Table responsive>
-                  <thead>
-                    <tr>
-                      <th>Record Id</th>
-                      <th>Record Name</th>
-                      <th>Server Name</th>
-                      <th>Interval</th>
-                      <th>Time Created</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Item</td>
-                      <td>Item</td>
-                      <td>Item</td>
-                      <td>Item</td>
-                      <td>Item</td>
-                      <td><Button>Delete</Button></td>
-                    </tr>
-                  </tbody>
-                  <tbody>
-                  <tr>
-                    <td>Item</td>
-                    <td>Item</td>
-                    <td>Item</td>
-                    <td>Item</td>
-                    <td>Item</td>
-                    <td><Button>Delete</Button></td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </CardBody>
-            </Card>
+            <AllRecordsCard/>
           </Col>
         </Row>
       </div>

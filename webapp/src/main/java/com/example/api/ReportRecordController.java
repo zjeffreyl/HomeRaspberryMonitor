@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/reportRecord/")
+@RequestMapping("/api/reportRecord")
 public class ReportRecordController {
     private ReportRecordService reportRecordService;
 
@@ -22,23 +22,27 @@ public class ReportRecordController {
     }
 
     @GetMapping
-    Collection<ReportRecord> reportRecords() {
-        return (Collection<ReportRecord>) reportRecordService.getAllReportRecords();
+    @CrossOrigin(origins = "http://localhost:3000")
+    public Collection<ReportRecord> reportRecords() {
+        return reportRecordService.getAllReportRecords();
     }
 
     @PostMapping
+    @CrossOrigin(origins = "http://localhost:3000")
     public int addReportReport(@RequestBody @Valid @NotNull ReportRecord reportRecord)
     {
         return reportRecordService.insertReportRecord(reportRecord);
     }
 
     @GetMapping(path = "{id}")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ReportRecord getReportRecordById(@PathVariable("id") UUID id)
     {
         return reportRecordService.getReportRecordById(id).orElse(null);
     }
 
     @DeleteMapping(path = "{id}")
+    @CrossOrigin(origins = "http://localhost:3000")
     public int deleteReportRecordById(@PathVariable("id") UUID id)
     {
         return reportRecordService.deleteReportRecordById(id);
