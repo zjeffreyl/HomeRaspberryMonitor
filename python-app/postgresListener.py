@@ -6,17 +6,18 @@ import time
 import os
 import requests
 import json
-import serverfinder
+import serverFinder
 
 URL = "http://raspberry-web-app:8080/api/reportRecord/"
 HEALTH_URL = "http://raspberry-web-app:8080/actuator/health/"
 raspberry_comment = "Raspberry Pi speed test id: "
 
+
 def generate_comment(id):
     return raspberry_comment + id
 
 
-def schedule_cron(notify_payload, my_cron, report_record_id):
+def schedule_cron(notify_payload, my_cron, report_record_id, server_id):
     job_exists = False
     for job in my_cron:
         if job.comment == generate_comment(report_record_id):
@@ -50,9 +51,12 @@ def process_payload(notify_payload, my_cron):
     if notify_payload['_op'] == 'DELETE':
         delete_cron(my_cron, report_record_id)
     else:
-        schedule_cron(notify_payload, my_cron, report_record_id)
+        server_id = notify_payload['server_id']
+        schedule_cron(notify_payload, my_cron, report_record_id, server_id)
 
 # refreshing the crontab based on the existing database
+
+
 def refresh_crontab(my_cron):
     for job in my_cron:
         if raspberry_comment in job.comment:
@@ -62,17 +66,20 @@ def refresh_crontab(my_cron):
     data = res.json()
     for dict_item in data:
         print("Scheduling " + str(dict_item['id']))
-        schedule_cron(create_json(dict_item), my_cron, dict_item['id'])
+        schedule_cron(create_json(dict_item), my_cron,
+                      dict_item['id'], dict_item['server_id'])
+
 
 def create_json(dict_item):
     data_obj = {
-        "id" : dict_item['id'],
-        "start_time" : dict_item['start_time'],
-        "end_time" : dict_item['end_time'],
-        "server" : dict_item['server'],
-        "interval_in_minutes" : dict_item['interval_in_minutes']
+        "id": dict_item['id'],
+        "start_time": dict_item['start_time'],
+        "end_time": dict_item['end_time'],
+        "server_id": dict_item['server_id'],
+        "interval_in_minutes": dict_item['interval_in_minutes']
     }
     return data_obj
+
 
 conn = psycopg2.connect(user=os.environ['POSTGRES_USER'], database=os.environ['POSTGRES_DB'],
                         host=os.environ['DB_SERVER'], password=os.environ['POSTGRES_PASSWORD'])
@@ -81,7 +88,7 @@ conn.autocommit = True
 cursor = conn.cursor()
 
 # put all nearby servers into the database
-serverfinder.update_servers(cursor)
+serverFinder.update_servers(cursor)
 
 # Remove all in crontab and put all in postgres db
 my_cron = CronTab(user=os.environ['USER'])
@@ -93,4 +100,6 @@ while True:
         conn.poll()
         while conn.notifies:
             notify = conn.notifies.pop(0)
-            process_payload(eval(notify.payload), my_cron)
+            print(notify.payload)
+            str_val = notify.payload.replace("null", "None")
+            process_payload(eval(str_val), my_cron)

@@ -1,17 +1,16 @@
 import React, { Component } from "react";
 import { Card, CardBody, Form, Button, Input } from "reactstrap";
-import axios from 'axios';
+import axios from "axios";
 import PropTypes from "prop-types";
-import {createRecord} from "../actions/recordActions";
-import {connect} from "react-redux";
+import { createRecord } from "../actions/recordActions";
+import { connect } from "react-redux";
 
 class AddRecordCard extends Component {
-
   state = {
     record_name: "",
     server_id: -1,
     interval: -1,
-    servers: []
+    servers: [],
   };
 
   static propTypes = {
@@ -29,17 +28,39 @@ class AddRecordCard extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    const { record_name, id, interval} = this.state;
+    const { record_name, server_id, interval } = this.state;
     const start_time = this.getCurrentFormattedDate();
     const end_time = "";
-    const interval_in_minutes = parseInt(interval.split(" ")[0])
-    const report = {record_name, id, interval_in_minutes, start_time, end_time}
+    //need to handle minutes to hours conversion
+    const interval_in_minutes = this.timeToMinutes(interval);
+    const report = {
+      record_name,
+      server_id,
+      interval_in_minutes,
+      start_time,
+      end_time,
+    };
     this.props.createRecord(report);
     this.setState({
-      record_name: '',
+      record_name: "",
       server_id: this.state.servers[0].id,
       interval: this.intervals[0],
     });
+  };
+
+  timeToMinutes(line) {
+    var number = parseInt(line.split(" ")[0]);
+    var unit = line.split(" ")[1];
+    switch (unit) {
+      case "minutes":
+        return number;
+      case "hour":
+      case "hours":
+        return number * 60;
+      case "day":
+      case "days":
+        return number * 60 * 24;
+    }
   }
 
   getCurrentFormattedDate() {
@@ -51,18 +72,20 @@ class AddRecordCard extends Component {
     let minutes = newDate.getMinutes();
     let seconds = newDate.getSeconds();
     let milliseonds = newDate.getMilliseconds();
-    let dash = '-';
-    return `${year}${dash}${month<10?`0${month}`:`${month}`}${dash}${date} ${hours}:${minutes}:${seconds}.${milliseonds}`
+    let dash = "-";
+    return `${year}${dash}${
+      month < 10 ? `0${month}` : `${month}`
+    }${dash}${date} ${hours}:${minutes}:${seconds}.${milliseonds}`;
   }
 
   componentDidMount() {
-    axios.get(`http://localhost:8080/api/server/`).then(res => {
+    axios.get(`http://localhost:8080/api/server/`).then((res) => {
       const servers = res.data;
       this.setState({
-        record_name: '',
+        record_name: "",
         server_id: servers[0].id,
         interval: this.intervals[0],
-        servers: servers
+        servers: servers,
       });
     });
   }
@@ -71,30 +94,48 @@ class AddRecordCard extends Component {
     this.setState({
       [e.target.name]: e.target.value,
     });
-  }
+  };
 
   render() {
-    const { record_name, interval, server_id, servers} = this.state;
+    const { record_name, interval, server_id, servers } = this.state;
     return (
       <Card>
         <CardBody>
           <Form onSubmit={this.onSubmit}>
             <h5>Add a new Record</h5>
-            <Input type="text" placeholder="Record Name Optional" name="record_name" onChange={this.onChange} value={record_name}/>
+            <Input
+              type="text"
+              placeholder="Record Name Optional"
+              name="record_name"
+              onChange={this.onChange}
+              value={record_name}
+            />
             <div>
               <h6>Nearby Servers to test with</h6>
-              <Input type="select" name="server_id" onChange={this.onChange} value={server_id}>
-                  {servers.map((item) => (
-                    <option key={item.id}>{item.name + " at " + item.location}</option>
-                  ))}
+              <Input
+                type="select"
+                name="server_id"
+                onChange={this.onChange}
+                value={server_id}
+              >
+                {servers.map((item, index) => (
+                  <option key={item.id} value={servers[index].id}>
+                    {item.name + " at " + item.location}
+                  </option>
+                ))}
               </Input>
             </div>
             <div>
               <h6>Select an Interval</h6>
-              <Input type="select" name="interval" onChange={this.onChange} value={interval}>
-                  {this.intervals.map((item, index) =>
-                    <option key={index}>{item}</option>
-                  )}
+              <Input
+                type="select"
+                name="interval"
+                onChange={this.onChange}
+                value={interval}
+              >
+                {this.intervals.map((item, index) => (
+                  <option key={index}>{item}</option>
+                ))}
               </Input>
             </div>
             <br />
@@ -106,4 +147,4 @@ class AddRecordCard extends Component {
   }
 }
 
-export default connect(null, {createRecord})(AddRecordCard);
+export default connect(null, { createRecord })(AddRecordCard);

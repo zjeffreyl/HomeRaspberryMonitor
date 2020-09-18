@@ -7,6 +7,7 @@ import requests
 URL = "http://raspberry-web-app:8080/api/serverReport/"
 speedtest = "speedtest-cli"
 
+
 def main(argv):
     recorded_at = datetime.datetime.now()
     print(recorded_at.strftime("%Y-%m-%-d %-H:%-M:%-S.%f"))
@@ -14,8 +15,10 @@ def main(argv):
         print("ERROR: There was no report record stated")
         return
     report_record_id = argv[0]
+    server_id = argv[1]
 
-    response = subprocess.check_output("{} --json".format(speedtest), shell=True)
+    response = subprocess.check_output(
+        "{} --json --server {}".format(speedtest, server_id), shell=True)
     response = json.loads(str(response.decode()))
     data_obj = {
         'download': response['download'],

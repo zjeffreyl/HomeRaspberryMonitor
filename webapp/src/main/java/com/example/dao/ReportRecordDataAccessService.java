@@ -23,7 +23,7 @@ public class ReportRecordDataAccessService implements ReportRecordDao{
     @Override
     public int insertReportRecord(UUID id, ReportRecord reportRecord) {
         String sql = "INSERT INTO report_record VALUES (?, ?, ?, ?, ?, ?)";
-        Object[] params = new Object[]{id, reportRecord.getName(), reportRecord.getStartTime(), reportRecord.getEndTime(), reportRecord.getServer(), reportRecord.getIntervalInMinutes()};
+        Object[] params = new Object[]{id, reportRecord.getName(), reportRecord.getStartTime(), reportRecord.getEndTime(), reportRecord.getServerId(), reportRecord.getIntervalInMinutes()};
         try {
             jdbcTemplate.update(sql, params);
             return 1;
@@ -69,7 +69,7 @@ public class ReportRecordDataAccessService implements ReportRecordDao{
         final String sql = "UPDATE report_record SET record_name = ?, start_time = ?, end_time = ?, server_id = ?, interval_in_minutes = ? WHERE id = \'" + id + "\'";
         try
         {
-            jdbcTemplate.update(sql, new Object[] {reportRecord.getName(), reportRecord.getStartTime(), reportRecord.getEndTime(), reportRecord.getServer(), reportRecord.getIntervalInMinutes()});
+            jdbcTemplate.update(sql, new Object[] {reportRecord.getName(), reportRecord.getStartTime(), reportRecord.getEndTime(), reportRecord.getServerId(), reportRecord.getIntervalInMinutes()});
             return 1;
         }
         catch(DataAccessException exc)

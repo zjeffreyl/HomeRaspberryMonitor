@@ -2,8 +2,7 @@ FROM ubuntu:latest
 
 WORKDIR /python-code
 
-RUN apt-get update
-RUN apt-get install python3.6
+RUN apt-get update && apt-get install python3.6
 RUN apt-get install -y postgresql-client
 RUN apt-get -y install python3-pip
 RUN apt-get install python3-psycopg2

@@ -11,7 +11,7 @@ public class ReportRecord {
     private final UUID id;
     private Timestamp startTime;
     private Timestamp endTime;
-    private int server_id;
+    private int serverId;
     private int intervalInMinutes;
     private String name;
 
@@ -19,14 +19,14 @@ public class ReportRecord {
                         @JsonProperty("record_name") String name,
                         @JsonProperty("start_time") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSS") Timestamp startTime,
                         @JsonProperty("end_time") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSS")Timestamp endTime,
-                        @JsonProperty("server_id") int server_id,
+                        @JsonProperty("server_id") int serverId,
                         @JsonProperty("interval_in_minutes") int intervalInMinutes
     )
     {
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.server_id = server_id;
+        this.serverId = serverId;
         this.intervalInMinutes = intervalInMinutes;
         this.name = name;
     }
@@ -42,9 +42,9 @@ public class ReportRecord {
         return endTime;
     }
 
-    public int getServer()
+    public int getServerId()
     {
-        return server_id;
+        return serverId;
     }
 
     public int getIntervalInMinutes()
@@ -59,6 +59,6 @@ public class ReportRecord {
     {
         String endStr = endTime != null ? endTime.toString() : "Still going";
         return "Report Record " + id.toString() + " starting: " + startTime.toString() + " to ending: " + endStr +
-                " from server: " + server_id + " with intervals of: " + intervalInMinutes + " minutes";
+                " from server: " + serverId + " with intervals of: " + intervalInMinutes + " minutes";
     }
 }
