@@ -29,7 +29,7 @@ def schedule_cron(notify_payload, my_cron, report_record_id, server_id):
 
     if job_exists is False:
         # Add a new crontab
-        new_job = my_cron.new(command='/usr/bin/python3 {}/speedtest.py {} >> {}/cron.log 2>&1'.format(os.environ['PWD'], report_record_id, os.environ['PWD']),
+        new_job = my_cron.new(command='/usr/bin/python3 {}/speedtest.py {} {} >> {}/cron.log 2>&1'.format(os.environ['PWD'], report_record_id, server_id, os.environ['PWD']),
                               comment=generate_comment(notify_payload['id']))
         new_job.minute.every(notify_payload['interval_in_minutes'])
         my_cron.write()

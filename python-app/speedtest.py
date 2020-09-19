@@ -10,13 +10,13 @@ speedtest = "speedtest-cli"
 
 def main(argv):
     recorded_at = datetime.datetime.now()
-    print(recorded_at.strftime("%Y-%m-%-d %-H:%-M:%-S.%f"))
-    if len(argv) != 1:
+    print(recorded_at.strftime("Starting report record for %Y-%m-%-d %-H:%-M:%-S.%f"))
+    print(argv)
+    if len(argv) != 2:
         print("ERROR: There was no report record stated")
         return
     report_record_id = argv[0]
     server_id = argv[1]
-
     response = subprocess.check_output(
         "{} --json --server {}".format(speedtest, server_id), shell=True)
     response = json.loads(str(response.decode()))

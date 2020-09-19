@@ -16,6 +16,7 @@ export class AllRecordsCard extends Component {
     records: PropTypes.array.isRequired,
     fetchRecords: PropTypes.func.isRequired,
     deleteRecord: PropTypes.func.isRequired,
+    servers: PropTypes.array.isRequired,
   };
 
   componentDidMount() {
@@ -24,6 +25,26 @@ export class AllRecordsCard extends Component {
 
   componentDidUpdate() {
     this.props.fetchRecords();
+  }
+
+  convertMinutesToString(minutes) {
+    var hourInMinutes = 60;
+    var hours = minutes / hourInMinutes;
+    if (hours >= 1) {
+      return hours + " hours";
+    } else {
+      return minutes + " minutes";
+    }
+  }
+
+  getServerNameFromId(id) {
+    console.log(id);
+    console.log(this.props.servers);
+    for (var i = 0; i < this.props.servers.length; i++) {
+      if (id === this.props.servers[i].id) {
+        return this.props.servers[i].name;
+      }
+    }
   }
 
   render() {
@@ -49,8 +70,10 @@ export class AllRecordsCard extends Component {
                 <tr key={index}>
                   <td>{record.id}</td>
                   <td>{record.record_name}</td>
-                  <td>{record.server_id}</td>
-                  <td>{record.interval_in_minutes}</td>
+                  <td>{this.getServerNameFromId(record.server_id)}</td>
+                  <td>
+                    {this.convertMinutesToString(record.interval_in_minutes)}
+                  </td>
                   <td>{record.start_time}</td>
                   <td>
                     <Button
@@ -73,6 +96,7 @@ const mapStateToProps = (state) => ({
   records: state.records.records,
 });
 
-export default connect(mapStateToProps, { fetchRecords, deleteRecord })(
-  AllRecordsCard
-);
+export default connect(mapStateToProps, {
+  fetchRecords,
+  deleteRecord,
+})(AllRecordsCard);

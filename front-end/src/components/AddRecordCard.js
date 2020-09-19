@@ -10,7 +10,6 @@ class AddRecordCard extends Component {
     record_name: "",
     server_id: -1,
     interval: -1,
-    servers: [],
   };
 
   static propTypes = {
@@ -18,6 +17,7 @@ class AddRecordCard extends Component {
   };
 
   intervals = [
+    "1 minutes",
     "15 minutes",
     "30 minutes",
     "1 hour",
@@ -60,6 +60,8 @@ class AddRecordCard extends Component {
       case "day":
       case "days":
         return number * 60 * 24;
+      default:
+        return 0;
     }
   }
 
@@ -97,7 +99,7 @@ class AddRecordCard extends Component {
   };
 
   render() {
-    const { record_name, interval, server_id, servers } = this.state;
+    const { record_name, interval, server_id } = this.state;
     return (
       <Card>
         <CardBody>
@@ -118,8 +120,8 @@ class AddRecordCard extends Component {
                 onChange={this.onChange}
                 value={server_id}
               >
-                {servers.map((item, index) => (
-                  <option key={item.id} value={servers[index].id}>
+                {this.props.servers.map((item, index) => (
+                  <option key={item.id} value={this.props.servers[index].id}>
                     {item.name + " at " + item.location}
                   </option>
                 ))}
