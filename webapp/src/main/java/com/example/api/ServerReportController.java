@@ -28,6 +28,7 @@ public class ServerReportController {
         }
 
         @PostMapping
+        @CrossOrigin(origins = "http://localhost:3000")
         public int addServerReport(@RequestBody @Valid @NotNull ServerReport report)
         {
                 return serverReportService.insertServerReport(report);
@@ -35,12 +36,14 @@ public class ServerReportController {
 
 
         @GetMapping(path = "{id}")
+        @CrossOrigin(origins = "http://localhost:3000")
         public ServerReport getServerReportById(@PathVariable("id") UUID id)
         {
                 return serverReportService.getServerReportsById(id).orElse(null);
         }
 
         @DeleteMapping(path = "{id}")
+        @CrossOrigin(origins = "http://localhost:3000")
         public int deleteServerReportById(@PathVariable("id") UUID id)
         {
                 return serverReportService.deleteServerReportById(id);

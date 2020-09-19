@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public class ReportRecord {
 
-    private final UUID id;
+    private UUID id;
     private Timestamp startTime;
     private Timestamp endTime;
     private int serverId;
@@ -29,6 +29,11 @@ public class ReportRecord {
         this.serverId = serverId;
         this.intervalInMinutes = intervalInMinutes;
         this.name = name;
+    }
+
+    public void setId(UUID id)
+    {
+        this.id = id;
     }
 
     public UUID getId() { return id; }

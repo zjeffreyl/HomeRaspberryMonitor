@@ -29,7 +29,7 @@ public class ReportRecordController {
 
     @PostMapping
     @CrossOrigin(origins = "http://localhost:3000")
-    public int addReportReport(@RequestBody @Valid @NotNull ReportRecord reportRecord)
+    public ReportRecord addReportReport(@RequestBody @Valid @NotNull ReportRecord reportRecord)
     {
         return reportRecordService.insertReportRecord(reportRecord);
     }
@@ -43,7 +43,7 @@ public class ReportRecordController {
 
     @DeleteMapping(path = "{id}")
     @CrossOrigin(origins = "http://localhost:3000")
-    public int deleteReportRecordById(@PathVariable("id") UUID id)
+    public ReportRecord deleteReportRecordById(@PathVariable("id") UUID id)
     {
         return reportRecordService.deleteReportRecordById(id);
     }

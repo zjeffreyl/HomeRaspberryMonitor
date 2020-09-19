@@ -17,6 +17,7 @@ export const createRecord = (recordData) => (dispatch) => {
   axios
     .post(`http://localhost:8080/api/reportRecord`, recordData)
     .then((res) => {
+      console.log(res.data);
       dispatch({
         type: NEW_RECORD,
         payload: res.data,
@@ -26,13 +27,12 @@ export const createRecord = (recordData) => (dispatch) => {
 };
 
 export const deleteRecord = (id) => (dispatch) => {
-  console.log("deleting");
   axios
     .delete(`http://localhost:8080/api/reportRecord/${id}`)
     .then((res) => {
       dispatch({
         type: DELETE_RECORD,
-        payload: id,
+        payload: res.data,
       });
     })
     .catch((err) => console.log(err));

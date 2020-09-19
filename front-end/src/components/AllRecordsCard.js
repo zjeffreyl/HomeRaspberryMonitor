@@ -8,6 +8,7 @@ import {
   Button,
 } from "reactstrap";
 import PropTypes from "prop-types";
+import { deleteServerReports } from "../actions/serverReportActions";
 import { fetchRecords, deleteRecord } from "../actions/recordActions";
 import { connect } from "react-redux";
 
@@ -16,14 +17,11 @@ export class AllRecordsCard extends Component {
     records: PropTypes.array.isRequired,
     fetchRecords: PropTypes.func.isRequired,
     deleteRecord: PropTypes.func.isRequired,
+    deleteServerReports: PropTypes.func.isRequired,
     servers: PropTypes.array.isRequired,
   };
 
   componentDidMount() {
-    this.props.fetchRecords();
-  }
-
-  componentDidUpdate() {
     this.props.fetchRecords();
   }
 
@@ -38,14 +36,17 @@ export class AllRecordsCard extends Component {
   }
 
   getServerNameFromId(id) {
-    console.log(id);
-    console.log(this.props.servers);
     for (var i = 0; i < this.props.servers.length; i++) {
       if (id === this.props.servers[i].id) {
         return this.props.servers[i].name;
       }
     }
   }
+
+  onDelete = (record_id) => {
+    this.props.deleteRecord(record_id);
+    this.props.deleteServerReports(record_id);
+  };
 
   render() {
     return (
@@ -76,9 +77,7 @@ export class AllRecordsCard extends Component {
                   </td>
                   <td>{record.start_time}</td>
                   <td>
-                    <Button
-                      onClick={this.props.deleteRecord.bind(this, record.id)}
-                    >
+                    <Button onClick={this.onDelete.bind(this, record.id)}>
                       Delete
                     </Button>
                   </td>
@@ -99,4 +98,5 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   fetchRecords,
   deleteRecord,
+  deleteServerReports,
 })(AllRecordsCard);

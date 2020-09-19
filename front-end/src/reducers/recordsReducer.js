@@ -1,4 +1,4 @@
-import { FETCH_RECORDS, NEW_RECORD } from "../actions/types";
+import { DELETE_RECORD, FETCH_RECORDS, NEW_RECORD } from "../actions/types";
 
 const initialState = {
   records: [],
@@ -14,7 +14,14 @@ export default function (state = initialState, action) {
     case NEW_RECORD:
       return {
         ...state,
-        records: [...state.records],
+        records: [...state.records, action.payload],
+      };
+    case DELETE_RECORD:
+      return {
+        ...state,
+        records: state.records.filter(
+          (record) => record.id !== action.payload.id
+        ),
       };
     default:
       return state;

@@ -7,9 +7,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface ReportRecordDao {
-    int insertReportRecord(UUID id, ReportRecord reportRecord);
+    ReportRecord insertReportRecord(UUID id, ReportRecord reportRecord);
 
-    default int insertReportRecord(ReportRecord reportRecord)
+    default ReportRecord insertReportRecord(ReportRecord reportRecord)
     {
         UUID id = UUID.randomUUID();
         return insertReportRecord(id, reportRecord);
@@ -17,7 +17,7 @@ public interface ReportRecordDao {
 
     List<ReportRecord> selectAllReportRecords();
 
-    int deleteReportRecordById(UUID id);
+    ReportRecord deleteReportRecordById(UUID id);
 
     int updateReportRecordById(UUID id, ReportRecord reportRecord);
 

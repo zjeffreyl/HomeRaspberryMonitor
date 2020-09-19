@@ -25,7 +25,7 @@ public class ReportRecordService {
         return reportRecordDao.selectAllReportRecords();
     }
 
-    public int insertReportRecord(ReportRecord report) {
+    public ReportRecord insertReportRecord(ReportRecord report) {
         return reportRecordDao.insertReportRecord(report); }
 
     public Optional<ReportRecord> getReportRecordById(UUID id)
@@ -33,7 +33,7 @@ public class ReportRecordService {
         return reportRecordDao.selectReportRecordById(id);
     }
 
-    public int deleteReportRecordById(UUID id)
+    public ReportRecord deleteReportRecordById(UUID id)
     {
         return reportRecordDao.deleteReportRecordById(id);
     }

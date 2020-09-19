@@ -52,7 +52,7 @@ public class ServerReportDataAccessService implements ServerReportDao{
 
     @Override
     public int deleteServerReportById(UUID id) {
-        final String sql = "DELETE FROM server_report WHERE id = ?";
+        final String sql = "DELETE FROM server_report WHERE report_record_id = ?";
         try
         {
             jdbcTemplate.update(sql, id);

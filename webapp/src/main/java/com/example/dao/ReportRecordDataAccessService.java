@@ -21,23 +21,24 @@ public class ReportRecordDataAccessService implements ReportRecordDao{
     }
 
     @Override
-    public int insertReportRecord(UUID id, ReportRecord reportRecord) {
+    public ReportRecord insertReportRecord(UUID id, ReportRecord reportRecord) {
         String sql = "INSERT INTO report_record VALUES (?, ?, ?, ?, ?, ?)";
         Object[] params = new Object[]{id, reportRecord.getName(), reportRecord.getStartTime(), reportRecord.getEndTime(), reportRecord.getServerId(), reportRecord.getIntervalInMinutes()};
         try {
             jdbcTemplate.update(sql, params);
-            return 1;
+            reportRecord.setId(id);
+            return reportRecord;
         }catch(DataAccessException exc)
         {
             System.out.println(exc.toString());
-            return 0;
+            return null;
         }
     }
 
     @Override
     public List<ReportRecord> selectAllReportRecords() {
         String sql = "SELECT id, record_name, start_time, end_time, server_id, interval_in_minutes FROM report_record";
-        List<ReportRecord> reportRecords = jdbcTemplate.query(sql, ((resultSet, i) -> {
+        return jdbcTemplate.query(sql, ((resultSet, i) -> {
             return new ReportRecord(
                     UUID.fromString(resultSet.getString("id")),
                     resultSet.getString("record_name"),
@@ -47,20 +48,20 @@ public class ReportRecordDataAccessService implements ReportRecordDao{
                     resultSet.getInt("interval_in_minutes")
             );
         }));
-        return reportRecords;
     }
 
     @Override
-    public int deleteReportRecordById(UUID id) {
+    public ReportRecord deleteReportRecordById(UUID id) {
         final String sql = "DELETE FROM report_record WHERE id = ?";
+        Optional<ReportRecord> reportRecord = selectReportRecordById(id);
         try
         {
             jdbcTemplate.update(sql, id);
-            return 1;
+            return reportRecord.orElse(null);
         }
         catch(DataAccessException exc)
         {
-            return 0;
+            return null;
         }
     }
 
