@@ -11,6 +11,7 @@ import PropTypes from "prop-types";
 import { deleteServerReports } from "../actions/serverReportActions";
 import { fetchRecords, deleteRecord } from "../actions/recordActions";
 import { connect } from "react-redux";
+import { minutesToString, UTCDefaultToLocalTimeZone } from "../conversions";
 
 export class AllRecordsCard extends Component {
   static propTypes = {
@@ -23,16 +24,6 @@ export class AllRecordsCard extends Component {
 
   componentDidMount() {
     this.props.fetchRecords();
-  }
-
-  convertMinutesToString(minutes) {
-    var hourInMinutes = 60;
-    var hours = minutes / hourInMinutes;
-    if (hours >= 1) {
-      return hours + " hours";
-    } else {
-      return minutes + " minutes";
-    }
   }
 
   getServerNameFromId(id) {
@@ -72,10 +63,8 @@ export class AllRecordsCard extends Component {
                   <td>{record.id}</td>
                   <td>{record.record_name}</td>
                   <td>{this.getServerNameFromId(record.server_id)}</td>
-                  <td>
-                    {this.convertMinutesToString(record.interval_in_minutes)}
-                  </td>
-                  <td>{record.start_time}</td>
+                  <td>{minutesToString(record.interval_in_minutes)}</td>
+                  <td>{UTCDefaultToLocalTimeZone(record.start_time)}</td>
                   <td>
                     <Button onClick={this.onDelete.bind(this, record.id)}>
                       Delete

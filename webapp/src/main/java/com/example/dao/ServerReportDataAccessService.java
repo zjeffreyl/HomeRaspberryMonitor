@@ -6,6 +6,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -35,6 +36,23 @@ public class ServerReportDataAccessService implements ServerReportDao{
     }
 
     @Override
+    public List<ServerReport> selectAllServerReportsByRecordId(UUID id) {
+        String sql = "SELECT id, download, upload, ping, recorded_at, report_record_id FROM server_report WHERE report_record_id = '" + id.toString() +"'";
+        List<ServerReport> serverReports = jdbcTemplate.query(sql, ((resultSet, i) -> {
+            return new ServerReport(
+                    UUID.fromString(resultSet.getString("id")),
+                    resultSet.getDouble("download"),
+                    resultSet.getDouble("upload"),
+                    resultSet.getDouble("ping"),
+                    resultSet.getTimestamp("recorded_at"),
+                    UUID.fromString(resultSet.getString("report_record_id"))
+            );
+        }));
+        serverReports.sort((a, b) -> b.getTimestamp().compareTo(a.getTimestamp()));
+        return serverReports;
+    }
+
+    @Override
     public List<ServerReport> selectAllServerReports() {
         String sql = "SELECT id, download, upload, ping, recorded_at, report_record_id FROM server_report";
         List<ServerReport> serverReports = jdbcTemplate.query(sql, ((resultSet, i) -> {
@@ -47,6 +65,7 @@ public class ServerReportDataAccessService implements ServerReportDao{
                     UUID.fromString(resultSet.getString("report_record_id"))
             );
         }));
+        serverReports.sort((a, b) -> b.getTimestamp().compareTo(a.getTimestamp()));
         return serverReports;
     }
 
@@ -74,6 +93,7 @@ public class ServerReportDataAccessService implements ServerReportDao{
         }
         catch(DataAccessException exc)
         {
+            System.out.println("With: " + sql);
             System.out.println(exc.toString());
             return 0;
         }

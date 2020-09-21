@@ -22,8 +22,8 @@ def schedule_cron(notify_payload, my_cron, report_record_id, server_id):
     for job in my_cron:
         if job.comment == generate_comment(report_record_id):
             job_exists = True
-            job.minute.every(notify_payload['interval_in_minutes'])
-            my_cron.write()
+            write_interval_in_minutes(
+                job, my_cron, notify_payload['interval_in_minutes'])
             print("Set job for " + notify_payload['id'])
             break
 
@@ -31,9 +31,25 @@ def schedule_cron(notify_payload, my_cron, report_record_id, server_id):
         # Add a new crontab
         new_job = my_cron.new(command='/usr/bin/python3 {}/speedtest.py {} {} >> {}/cron.log 2>&1'.format(os.environ['PWD'], report_record_id, server_id, os.environ['PWD']),
                               comment=generate_comment(notify_payload['id']))
-        new_job.minute.every(notify_payload['interval_in_minutes'])
-        my_cron.write()
+        write_interval_in_minutes(
+            new_job, my_cron, notify_payload['interval_in_minutes'])
         print("Set job for " + notify_payload['id'])
+
+
+def write_interval_in_minutes(job, my_cron, interval_in_minutes):
+    print("Setting: ")
+    if interval_in_minutes / 1440 >= 1:
+        job.day.every(interval_in_minutes / 1440)
+        print(interval_in_minutes / 1440)
+    interval_in_minutes = interval_in_minutes % 1440
+    if interval_in_minutes / 60 >= 1:
+        job.hour.every(interval_in_minutes / 60)
+        print(interval_in_minutes / 60)
+    interval_in_minutes = interval_in_minutes % 60
+    if interval_in_minutes >= 1:
+        job.minute.every(interval_in_minutes)
+        print(interval_in_minutes)
+    my_cron.write()
 
 
 def delete_cron(my_cron, report_record_id):

@@ -17,8 +17,8 @@ public class ReportRecord {
 
     public ReportRecord(@JsonProperty("id") UUID id,
                         @JsonProperty("record_name") String name,
-                        @JsonProperty("start_time") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSS") Timestamp startTime,
-                        @JsonProperty("end_time") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSS")Timestamp endTime,
+                        @JsonProperty("start_time") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "UTC") Timestamp startTime,
+                        @JsonProperty("end_time") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "UTC") Timestamp endTime,
                         @JsonProperty("server_id") int serverId,
                         @JsonProperty("interval_in_minutes") int intervalInMinutes
     )

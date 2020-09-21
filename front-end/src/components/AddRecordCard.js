@@ -4,6 +4,7 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import { createRecord } from "../actions/recordActions";
 import { connect } from "react-redux";
+import { timeToIntegerMinutes } from "../conversions";
 
 class AddRecordCard extends Component {
   state = {
@@ -32,7 +33,7 @@ class AddRecordCard extends Component {
     const start_time = this.getCurrentFormattedDate();
     const end_time = "";
     //need to handle minutes to hours conversion
-    const interval_in_minutes = this.timeToMinutes(interval);
+    const interval_in_minutes = timeToIntegerMinutes(interval);
     const report = {
       record_name,
       server_id,
@@ -48,36 +49,17 @@ class AddRecordCard extends Component {
     });
   };
 
-  timeToMinutes(line) {
-    var number = parseInt(line.split(" ")[0]);
-    var unit = line.split(" ")[1];
-    switch (unit) {
-      case "minutes":
-        return number;
-      case "hour":
-      case "hours":
-        return number * 60;
-      case "day":
-      case "days":
-        return number * 60 * 24;
-      default:
-        return 0;
-    }
-  }
-
   getCurrentFormattedDate() {
     let newDate = new Date();
-    let month = newDate.getMonth() + 1;
-    let year = newDate.getFullYear();
-    let date = newDate.getDate();
-    let hours = newDate.getHours();
-    let minutes = newDate.getMinutes();
-    let seconds = newDate.getSeconds();
-    let milliseonds = newDate.getMilliseconds();
+    let month = newDate.getUTCMonth() + 1;
+    let year = newDate.getUTCFullYear();
+    let date = newDate.getUTCDate();
+    let hours = newDate.getUTCHours();
+    let minutes = newDate.getUTCMinutes();
     let dash = "-";
     return `${year}${dash}${
       month < 10 ? `0${month}` : `${month}`
-    }${dash}${date} ${hours}:${minutes}:${seconds}.${milliseonds}`;
+    }${dash}${date} ${hours}:${minutes}`;
   }
 
   componentDidMount() {

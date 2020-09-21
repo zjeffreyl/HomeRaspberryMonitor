@@ -27,13 +27,19 @@ public class ServerReportController {
                 return serverReportService.getAllServerReports();
         }
 
+        @GetMapping(path = "report_record/{id}")
+        @CrossOrigin(origins = "http://localhost:3000")
+        public Collection<ServerReport> serverReportsFromRecordId(@PathVariable("id") UUID id)
+        {
+                return serverReportService.getAllServerReportsByRecordId(id);
+        }
+
         @PostMapping
         @CrossOrigin(origins = "http://localhost:3000")
         public int addServerReport(@RequestBody @Valid @NotNull ServerReport report)
         {
                 return serverReportService.insertServerReport(report);
         }
-
 
         @GetMapping(path = "{id}")
         @CrossOrigin(origins = "http://localhost:3000")

@@ -17,7 +17,6 @@ export const createRecord = (recordData) => (dispatch) => {
   axios
     .post(`http://localhost:8080/api/reportRecord`, recordData)
     .then((res) => {
-      console.log(res.data);
       dispatch({
         type: NEW_RECORD,
         payload: res.data,

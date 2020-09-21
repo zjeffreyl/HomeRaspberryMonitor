@@ -15,6 +15,8 @@ public interface ServerReportDao {
         return insertServerReport(id, serverReport);
     }
 
+    List<ServerReport> selectAllServerReportsByRecordId(UUID id);
+    
     List<ServerReport> selectAllServerReports();
 
     int deleteServerReportById(UUID id);

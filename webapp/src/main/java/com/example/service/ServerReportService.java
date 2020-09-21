@@ -19,6 +19,10 @@ public class ServerReportService {
         this.serverReportDao = serverReportDao;
     }
 
+    public List<ServerReport> getAllServerReportsByRecordId(UUID id) {
+        return serverReportDao.selectAllServerReportsByRecordId(id);
+    }
+
     public List<ServerReport> getAllServerReports()
     {
         return serverReportDao.selectAllServerReports();

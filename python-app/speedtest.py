@@ -10,7 +10,6 @@ speedtest = "speedtest-cli"
 
 def main(argv):
     recorded_at = datetime.datetime.now()
-    print(recorded_at.strftime("Starting report record for %Y-%m-%-d %-H:%-M:%-S.%f"))
     print(argv)
     if len(argv) != 2:
         print("ERROR: There was no report record stated")
@@ -24,7 +23,7 @@ def main(argv):
         'download': response['download'],
         'upload': response['upload'],
         'ping': response['ping'],
-        'recorded_at': recorded_at.strftime("%Y-%m-%-d %-H:%-M:%-S.%f"),
+        'recorded_at': recorded_at.strftime("%Y-%m-%-d %-H:%-M"),
         'report_record_id': report_record_id
     }
     x = requests.post(URL, json=data_obj)
