@@ -20,11 +20,12 @@ def generate_comment(id):
 def schedule_cron(notify_payload, my_cron, report_record_id, server_id):
     job_exists = False
     for job in my_cron:
+        # if this job already exists
         if job.comment == generate_comment(report_record_id):
             job_exists = True
-            write_interval_in_minutes(
-                job, my_cron, notify_payload['interval_in_minutes'])
-            print("Set job for " + notify_payload['id'])
+            # write_interval_in_minutes(
+            #     job, my_cron, notify_payload['interval_in_minutes'])
+            # print("Set job for " + notify_payload['id'] + "again")
             break
 
     if job_exists is False:
@@ -37,18 +38,21 @@ def schedule_cron(notify_payload, my_cron, report_record_id, server_id):
 
 
 def write_interval_in_minutes(job, my_cron, interval_in_minutes):
-    print("Setting: ")
-    if interval_in_minutes / 1440 >= 1:
-        job.day.every(interval_in_minutes / 1440)
-        print(interval_in_minutes / 1440)
-    interval_in_minutes = interval_in_minutes % 1440
-    if interval_in_minutes / 60 >= 1:
-        job.hour.every(interval_in_minutes / 60)
-        print(interval_in_minutes / 60)
-    interval_in_minutes = interval_in_minutes % 60
-    if interval_in_minutes >= 1:
-        job.minute.every(interval_in_minutes)
-        print(interval_in_minutes)
+    lst = [1440, 60, 1]
+    s = "* *"
+    firstUsedUnitFound = False
+    for num in lst:
+        amount = int(interval_in_minutes/num)
+        if amount == 0:
+            if not firstUsedUnitFound:
+                s = "{} {}".format("*", s)
+            else:
+                s = "{} {}".format(amount, s)
+        else:
+            s = "*/{} {}".format(amount, s)
+            firstUsedUnitFound = True
+        interval_in_minutes %= num
+    job.setall(s)
     my_cron.write()
 
 

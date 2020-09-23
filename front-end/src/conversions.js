@@ -31,11 +31,11 @@ export const UTCDefaultToLocalTimeZone = (time) => {
   var newDate = new Date(date.getTime() - offset * 60 * 1000);
   var year = newDate.getFullYear();
   var month = newDate.getMonth();
-  var date = newDate.getDate();
+  var num_date = newDate.getDate();
   var hours = newDate.getHours();
   var minutes = newDate.getMinutes();
   var dash = "-";
   return `${year}${dash}${
     month < 10 ? `0${month}` : `${month}`
-  }${dash}${date} ${hours}:${minutes}`;
+  }${dash}${num_date} ${hours}:${minutes}`;
 };

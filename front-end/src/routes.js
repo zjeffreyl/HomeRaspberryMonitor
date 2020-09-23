@@ -1,5 +1,5 @@
 import RecordsView from "./views/RecordsView";
-import DashboardView from "./views/DashboardView";
+import DashboardViewConnect from "./views/DashboardView";
 
 var routes = [
   {
@@ -10,7 +10,7 @@ var routes = [
   {
     path: "/dashboard",
     name: "Dashboard",
-    component: DashboardView,
+    component: DashboardViewConnect,
   },
 ];
 

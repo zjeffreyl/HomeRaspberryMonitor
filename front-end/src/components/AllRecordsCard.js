@@ -24,6 +24,7 @@ export class AllRecordsCard extends Component {
 
   componentDidMount() {
     this.props.fetchRecords();
+    console.log(this.props.records);
   }
 
   getServerNameFromId(id) {

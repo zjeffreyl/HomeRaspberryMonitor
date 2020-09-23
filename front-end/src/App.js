@@ -4,14 +4,14 @@ import "./css/App.css";
 import { Col, Row } from "reactstrap";
 import routes from "./routes";
 import { Route, Switch, BrowserRouter } from "react-router-dom";
-import { Provider } from 'react-redux';
-import store from './store';
+import { Provider } from "react-redux";
+import store from "./store";
 
 function App(props) {
   return (
     <div>
       <Provider store={store}>
-        <BrowserRouter>
+        <BrowserRouter routerState={store}>
           <Row>
             <Col>
               <SideBar {...props} routes={routes} />
