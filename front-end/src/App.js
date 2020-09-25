@@ -6,6 +6,7 @@ import routes from "./routes";
 import { Route, Switch, BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
+import RecordsView from "./views/RecordsView";
 
 function App(props) {
   return (
@@ -13,10 +14,10 @@ function App(props) {
       <Provider store={store}>
         <BrowserRouter routerState={store}>
           <Row>
-            <Col>
+            <Col md="2">
               <SideBar {...props} routes={routes} />
             </Col>
-            <Col>
+            <Col md="10">
               <Switch>
                 {routes.map((prop, index) => {
                   return (

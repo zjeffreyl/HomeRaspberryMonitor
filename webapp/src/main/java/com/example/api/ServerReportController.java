@@ -24,40 +24,37 @@ public class ServerReportController {
         @GetMapping
         @CrossOrigin(origins = "http://localhost:3000")
         public Collection<ServerReport> serverReports() {
+                System.out.println(serverReportService.getAllServerReports());
                 return serverReportService.getAllServerReports();
         }
 
         @GetMapping(path = "report_record/{id}")
         @CrossOrigin(origins = "http://localhost:3000")
-        public Collection<ServerReport> serverReportsFromRecordId(@PathVariable("id") UUID id)
-        {
+        public Collection<ServerReport> serverReportsFromRecordId(@PathVariable("id") UUID id) {
                 return serverReportService.getAllServerReportsByRecordId(id);
         }
 
         @PostMapping
         @CrossOrigin(origins = "http://localhost:3000")
-        public int addServerReport(@RequestBody @Valid @NotNull ServerReport report)
-        {
+        public int addServerReport(@RequestBody @Valid @NotNull ServerReport report) {
                 return serverReportService.insertServerReport(report);
         }
 
         @GetMapping(path = "{id}")
         @CrossOrigin(origins = "http://localhost:3000")
-        public ServerReport getServerReportById(@PathVariable("id") UUID id)
-        {
+        public ServerReport getServerReportById(@PathVariable("id") UUID id) {
                 return serverReportService.getServerReportsById(id).orElse(null);
         }
 
         @DeleteMapping(path = "{id}")
         @CrossOrigin(origins = "http://localhost:3000")
-        public int deleteServerReportById(@PathVariable("id") UUID id)
-        {
+        public int deleteServerReportById(@PathVariable("id") UUID id) {
                 return serverReportService.deleteServerReportById(id);
         }
 
-        @RequestMapping(value = "{id}", produces = "application/json",  method=RequestMethod.PUT)
-        public int updateServerReportById(@PathVariable("id") @Valid @NotNull UUID id, @RequestBody ServerReport report)
-        {
+        @RequestMapping(value = "{id}", produces = "application/json", method = RequestMethod.PUT)
+        public int updateServerReportById(@PathVariable("id") @Valid @NotNull UUID id,
+                        @RequestBody ServerReport report) {
                 return serverReportService.updateServerReportById(id, report);
         }
 }

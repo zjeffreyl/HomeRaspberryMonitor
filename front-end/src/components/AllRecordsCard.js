@@ -24,7 +24,6 @@ export class AllRecordsCard extends Component {
 
   componentDidMount() {
     this.props.fetchRecords();
-    console.log(this.props.records);
   }
 
   getServerNameFromId(id) {
@@ -41,6 +40,7 @@ export class AllRecordsCard extends Component {
   };
 
   render() {
+    console.log(this.props.records);
     return (
       <Card>
         <CardHeader>

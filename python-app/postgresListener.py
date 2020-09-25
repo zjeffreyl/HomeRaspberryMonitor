@@ -18,6 +18,7 @@ def generate_comment(id):
 
 
 def schedule_cron(notify_payload, my_cron, report_record_id, server_id):
+    print("Payload: " + str(notify_payload))
     job_exists = False
     for job in my_cron:
         # if this job already exists
@@ -32,28 +33,29 @@ def schedule_cron(notify_payload, my_cron, report_record_id, server_id):
         # Add a new crontab
         new_job = my_cron.new(command='/usr/bin/python3 {}/speedtest.py {} {} >> {}/cron.log 2>&1'.format(os.environ['PWD'], report_record_id, server_id, os.environ['PWD']),
                               comment=generate_comment(notify_payload['id']))
-        write_interval_in_minutes(
-            new_job, my_cron, notify_payload['interval_in_minutes'])
+        write_interval(
+            new_job, my_cron, notify_payload['interval_in_minutes'], notify_payload['start_hour'], notify_payload['end_hour'])
         print("Set job for " + notify_payload['id'])
 
 
-def write_interval_in_minutes(job, my_cron, interval_in_minutes):
-    lst = [1440, 60, 1]
-    s = "* *"
-    firstUsedUnitFound = False
-    for num in lst:
-        amount = int(interval_in_minutes/num)
-        if amount == 0:
-            if not firstUsedUnitFound:
-                s = "{} {}".format("*", s)
-            else:
-                s = "{} {}".format(amount, s)
-        else:
-            s = "*/{} {}".format(amount, s)
-            firstUsedUnitFound = True
-        interval_in_minutes %= num
+def write_interval(job, my_cron, interval_in_minutes, start_hour, end_hour):
+    s = " * * *"
+    s_hour = start_hour.split(':')[0]
+    e_hour = int(end_hour.split(':')[0]) - 1
+    s = s_hour + "-" + str(e_hour) + s
+    minutes = 0
+    if interval_in_minutes < 60:
+        minutes = "*/" + str(interval_in_minutes)
+    s = str(minutes) + " " + str(s)
     job.setall(s)
     my_cron.write()
+    print("Set " + s)
+    if interval_in_minutes < 60:
+        # Need to set the last one
+        other_job = job
+        print("Set " + "0 " + str(e_hour + 1) + " * * *")
+        job.setall("0 " + str(e_hour + 1) + " * * *")
+        my_cron.write()
 
 
 def delete_cron(my_cron, report_record_id):
@@ -84,9 +86,10 @@ def refresh_crontab(my_cron):
             my_cron.write()
     res = requests.get(URL)
     data = res.json()
+    print(str(data))
     for dict_item in data:
         print("Scheduling " + str(dict_item['id']))
-        schedule_cron(create_json(dict_item), my_cron,
+        schedule_cron(dict_item, my_cron,
                       dict_item['id'], dict_item['server_id'])
 
 
@@ -120,6 +123,6 @@ while True:
         conn.poll()
         while conn.notifies:
             notify = conn.notifies.pop(0)
-            print(notify.payload)
+            print("Payload: " + str(notify.payload))
             str_val = notify.payload.replace("null", "None")
             process_payload(eval(str_val), my_cron)
