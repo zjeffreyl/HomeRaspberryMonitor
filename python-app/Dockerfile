@@ -11,10 +11,14 @@ RUN apt-get install -y cron
 RUN touch cron.log
 RUN pip3 install requests
 RUN pip3 install python-crontab
+RUN pip3 install pytz
+RUN pip3 install tzlocal
 RUN apt-get install speedtest-cli
 #RUN pip3 install speedtest-cli
 # Editor for debugging purposes 
+RUN apt-get update
 RUN apt-get -y install vim
+
 COPY . .
 RUN ["chmod", "+x", "./wait-for-it.sh"]
 

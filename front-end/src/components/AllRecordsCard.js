@@ -39,8 +39,12 @@ export class AllRecordsCard extends Component {
     this.props.deleteServerReports(record_id);
   };
 
+  trimTime(time) {
+    var units = time.split(":");
+    return parseInt(units[0]) + ":" + units[1];
+  }
+
   render() {
-    console.log(this.props.records);
     return (
       <Card>
         <CardHeader>
@@ -53,6 +57,7 @@ export class AllRecordsCard extends Component {
                 <th>Record Id</th>
                 <th>Record Name</th>
                 <th>Server Name</th>
+                <th>Recording Hours</th>
                 <th>Interval</th>
                 <th>Time Created</th>
                 <th />
@@ -64,6 +69,10 @@ export class AllRecordsCard extends Component {
                   <td>{record.id}</td>
                   <td>{record.record_name}</td>
                   <td>{this.getServerNameFromId(record.server_id)}</td>
+                  <td>
+                    {this.trimTime(record.start_hour)} -{" "}
+                    {this.trimTime(record.end_hour)}
+                  </td>
                   <td>{minutesToString(record.interval_in_minutes)}</td>
                   <td>{UTCDefaultToLocalTimeZone(record.start_time)}</td>
                   <td>

@@ -30,10 +30,12 @@ export const UTCDefaultToLocalTimeZone = (time) => {
   var offset = date.getTimezoneOffset();
   var newDate = new Date(date.getTime() - offset * 60 * 1000);
   var year = newDate.getFullYear();
-  var month = newDate.getMonth();
+  var month = newDate.getMonth() + 1;
   var num_date = newDate.getDate();
   var hours = newDate.getHours();
   var minutes = newDate.getMinutes();
+  hours = hours <= 9 ? "0" + hours : hours;
+  minutes = minutes <= 9 ? "0" + minutes : minutes;
   var dash = "-";
   return `${year}${dash}${
     month < 10 ? `0${month}` : `${month}`

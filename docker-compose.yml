@@ -27,6 +27,7 @@ services:
       - POSTGRES_PASSWORD=password
       - DB_SERVER=raspberry-postgres
       - SERVER=raspberry-web-app
+      - TIMEZONE=$TIMEZONE
     depends_on:
       - raspberry-postgres
       - web-app

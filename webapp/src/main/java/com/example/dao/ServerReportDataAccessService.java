@@ -6,30 +6,28 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Repository("postgres-serverReport")
-public class ServerReportDataAccessService implements ServerReportDao{
+public class ServerReportDataAccessService implements ServerReportDao {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public ServerReportDataAccessService(JdbcTemplate jdbcTemplate)
-    {
+    public ServerReportDataAccessService(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
     public int insertServerReport(UUID id, ServerReport serverReport) {
         String sql = "INSERT INTO server_report VALUES (?, ?, ?, ?, ?, ?)";
-        Object[] params = new Object[]{id, serverReport.getDownload(), serverReport.getUpload(), serverReport.getPing(), serverReport.getTimestamp(), serverReport.getReportRecordId()};
+        Object[] params = new Object[] { id, serverReport.getDownload(), serverReport.getUpload(),
+                serverReport.getPing(), serverReport.getTimestamp(), serverReport.getReportRecordId() };
         try {
             jdbcTemplate.update(sql, params);
             return 1;
-        }catch(DataAccessException exc)
-        {
+        } catch (DataAccessException exc) {
             System.out.println(exc.toString());
             return 0;
         }
@@ -37,16 +35,12 @@ public class ServerReportDataAccessService implements ServerReportDao{
 
     @Override
     public List<ServerReport> selectAllServerReportsByRecordId(UUID id) {
-        String sql = "SELECT id, download, upload, ping, recorded_at, report_record_id FROM server_report WHERE report_record_id = '" + id.toString() +"'";
+        String sql = "SELECT id, download, upload, ping, recorded_at, report_record_id FROM server_report WHERE report_record_id = '"
+                + id.toString() + "'";
         List<ServerReport> serverReports = jdbcTemplate.query(sql, ((resultSet, i) -> {
-            return new ServerReport(
-                    UUID.fromString(resultSet.getString("id")),
-                    resultSet.getDouble("download"),
-                    resultSet.getDouble("upload"),
-                    resultSet.getDouble("ping"),
-                    resultSet.getTimestamp("recorded_at"),
-                    UUID.fromString(resultSet.getString("report_record_id"))
-            );
+            return new ServerReport(UUID.fromString(resultSet.getString("id")), resultSet.getDouble("download"),
+                    resultSet.getDouble("upload"), resultSet.getDouble("ping"), resultSet.getTimestamp("recorded_at"),
+                    UUID.fromString(resultSet.getString("report_record_id")));
         }));
         serverReports.sort((a, b) -> b.getTimestamp().compareTo(a.getTimestamp()));
         return serverReports;
@@ -56,14 +50,9 @@ public class ServerReportDataAccessService implements ServerReportDao{
     public List<ServerReport> selectAllServerReports() {
         String sql = "SELECT id, download, upload, ping, recorded_at, report_record_id FROM server_report";
         List<ServerReport> serverReports = jdbcTemplate.query(sql, ((resultSet, i) -> {
-            return new ServerReport(
-                    UUID.fromString(resultSet.getString("id")),
-                    resultSet.getDouble("download"),
-                    resultSet.getDouble("upload"),
-                    resultSet.getDouble("ping"),
-                    resultSet.getTimestamp("recorded_at"),
-                    UUID.fromString(resultSet.getString("report_record_id"))
-            );
+            return new ServerReport(UUID.fromString(resultSet.getString("id")), resultSet.getDouble("download"),
+                    resultSet.getDouble("upload"), resultSet.getDouble("ping"), resultSet.getTimestamp("recorded_at"),
+                    UUID.fromString(resultSet.getString("report_record_id")));
         }));
         serverReports.sort((a, b) -> b.getTimestamp().compareTo(a.getTimestamp()));
         return serverReports;
@@ -72,27 +61,23 @@ public class ServerReportDataAccessService implements ServerReportDao{
     @Override
     public int deleteServerReportById(UUID id) {
         final String sql = "DELETE FROM server_report WHERE report_record_id = ?";
-        try
-        {
+        try {
             jdbcTemplate.update(sql, id);
             return 1;
-        }
-        catch(DataAccessException exc)
-        {
+        } catch (DataAccessException exc) {
             return 0;
         }
     }
 
     @Override
     public int updateServerReportById(UUID id, ServerReport serverReport) {
-        final String sql = "UPDATE server_report SET download = ?, upload = ?, ping = ?, timestamp = ?, record_report_id = ? WHERE id = " + "\'" + id + "\'";
-        try
-        {
-            jdbcTemplate.update(sql, new Object[] {serverReport.getDownload(), serverReport.getUpload(), serverReport.getPing(), serverReport.getTimestamp(), serverReport.getReportRecordId()});
+        final String sql = "UPDATE server_report SET download = ?, upload = ?, ping = ?, timestamp = ?, record_report_id = ? WHERE id = "
+                + "\'" + id + "\'";
+        try {
+            jdbcTemplate.update(sql, new Object[] { serverReport.getDownload(), serverReport.getUpload(),
+                    serverReport.getPing(), serverReport.getTimestamp(), serverReport.getReportRecordId() });
             return 1;
-        }
-        catch(DataAccessException exc)
-        {
+        } catch (DataAccessException exc) {
             System.out.println("With: " + sql);
             System.out.println(exc.toString());
             return 0;
@@ -100,18 +85,12 @@ public class ServerReportDataAccessService implements ServerReportDao{
     }
 
     @Override
-    public Optional<ServerReport> selectServerReportById(UUID id)
-    {
+    public Optional<ServerReport> selectServerReportById(UUID id) {
         final String sql = "SELECT * FROM server_report WHERE id = ?";
-        ServerReport report = jdbcTemplate.queryForObject(sql, new Object[] {id}, ((resultSet, i) -> {
-            return new ServerReport(
-                    UUID.fromString(resultSet.getString("id")),
-                    resultSet.getDouble("download"),
-                    resultSet.getDouble("upload"),
-                    resultSet.getDouble("ping"),
-                    resultSet.getTimestamp("recorded_at"),
-                    UUID.fromString(resultSet.getString("report_record_id"))
-            );
+        ServerReport report = jdbcTemplate.queryForObject(sql, new Object[] { id }, ((resultSet, i) -> {
+            return new ServerReport(UUID.fromString(resultSet.getString("id")), resultSet.getDouble("download"),
+                    resultSet.getDouble("upload"), resultSet.getDouble("ping"), resultSet.getTimestamp("recorded_at"),
+                    UUID.fromString(resultSet.getString("report_record_id")));
         }));
         return Optional.ofNullable(report);
     }

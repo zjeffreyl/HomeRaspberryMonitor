@@ -14,6 +14,7 @@ import PropTypes from "prop-types";
 import { createRecord, fetchRecords } from "../actions/recordActions";
 import { connect } from "react-redux";
 import { timeToIntegerMinutes } from "../conversions";
+import TimePicker from "react-time-picker";
 
 class AddRecordCard extends Component {
   state = {
@@ -23,18 +24,12 @@ class AddRecordCard extends Component {
     visible: false,
     start_time: "",
     end_time: "",
+    start_hour: "0:00:00",
+    end_hour: "0:00:00",
     warning_message: "",
   };
 
-  intervals = [
-    "1 minutes",
-    "15 minutes",
-    "30 minutes",
-    "1 hour",
-    "3 hours",
-    "10 hours",
-    "24 hours",
-  ];
+  intervals = ["10 minutes", "15 minutes", "30 minutes", "1 hour", "3 hours"];
 
   static propTypes = {
     createRecord: PropTypes.func.isRequired,
@@ -42,12 +37,16 @@ class AddRecordCard extends Component {
     records: PropTypes.array.isRequired,
   };
 
+  constructor() {
+    super();
+  }
+
   recordsNameExists(record_name) {
     if (record_name.trim().length === 0) {
       return false;
     }
     var recordsWithName = this.props.records.filter(function (record) {
-      return record.name.trim().length === 0;
+      return record_name.trim().length === 0;
     });
     for (var i = 0; i < recordsWithName.length; i++) {
       if (recordsWithName[i] === record_name) {
@@ -65,16 +64,13 @@ class AddRecordCard extends Component {
       interval,
       start_time,
       end_time,
+      start_hour,
+      end_hour,
     } = this.state;
     if (this.recordsNameExists(record_name)) {
       this.setState({
         visible: true,
         message: "Record name already exists",
-      });
-    } else if (start_time >= end_time) {
-      this.setState({
-        visible: true,
-        message: "Start time is after end time",
       });
     } else {
       const start_time = this.getCurrentFormattedDate();
@@ -87,6 +83,8 @@ class AddRecordCard extends Component {
         interval_in_minutes,
         start_time,
         end_time,
+        start_hour,
+        end_hour,
       };
       this.props.createRecord(report);
       this.setState({
@@ -94,6 +92,8 @@ class AddRecordCard extends Component {
         server_id: this.state.servers[0].id,
         interval: this.intervals[0],
         visible: false,
+        start_hour: "",
+        end_hour: "",
       });
     }
   };
@@ -117,6 +117,20 @@ class AddRecordCard extends Component {
     });
   };
 
+  handleStartChanged = (time) => {
+    if (time == null) return;
+    this.setState({
+      start_hour: time + ":00",
+    });
+  };
+
+  handleEndChanged = (time) => {
+    if (time == null) return;
+    this.setState({
+      end_hour: time + ":00",
+    });
+  };
+
   getCurrentFormattedDate() {
     let newDate = new Date();
     let month = newDate.getUTCMonth() + 1;
@@ -134,8 +148,8 @@ class AddRecordCard extends Component {
       record_name,
       interval,
       server_id,
-      start_time,
-      end_time,
+      start_hour,
+      end_hour,
     } = this.state;
     return (
       <Card>
@@ -169,30 +183,30 @@ class AddRecordCard extends Component {
               <p>Most accurate results when everyone's asleep</p>
               <Row>
                 <Col>
-                  <Input
-                    type="time"
-                    step="3600000"
-                    name="start_time"
-                    value={start_time}
-                    onClick={(e) => e.preventDefault()}
-                    onChange={this.onChange}
-                  ></Input>
+                  <TimePicker
+                    value={start_hour}
+                    name="start_hour"
+                    disableClock={true}
+                    onChange={this.handleStartChanged}
+                    maxDetail="hour"
+                  />
                 </Col>
                 <Col>
                   <h4> to </h4>
                 </Col>
                 <Col>
-                  <Input
-                    type="time"
-                    name="end_time"
-                    value={end_time}
-                    onChange={this.onChange}
-                  ></Input>
+                  <TimePicker
+                    value={end_hour}
+                    name="end_hour"
+                    disableClock={true}
+                    onChange={this.handleEndChanged}
+                    maxDetail="hour"
+                  />
                 </Col>
               </Row>
             </div>
             <div>
-              <h5>Select an Interval</h5>
+              <h6>Every</h6>
               <Input
                 type="select"
                 name="interval"

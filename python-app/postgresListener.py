@@ -7,6 +7,8 @@ import os
 import requests
 import json
 import serverFinder
+import datetime
+import pytz
 
 URL = "http://raspberry-web-app:8080/api/reportRecord/"
 HEALTH_URL = "http://raspberry-web-app:8080/actuator/health/"
@@ -31,31 +33,47 @@ def schedule_cron(notify_payload, my_cron, report_record_id, server_id):
 
     if job_exists is False:
         # Add a new crontab
-        new_job = my_cron.new(command='/usr/bin/python3 {}/speedtest.py {} {} >> {}/cron.log 2>&1'.format(os.environ['PWD'], report_record_id, server_id, os.environ['PWD']),
-                              comment=generate_comment(notify_payload['id']))
+        command = '/usr/bin/python3 {}/speedtest.py {} {} >> {}/cron.log 2>&1'.format(
+            os.environ['PWD'], report_record_id, server_id, os.environ['PWD'])
         write_interval(
-            new_job, my_cron, notify_payload['interval_in_minutes'], notify_payload['start_hour'], notify_payload['end_hour'])
+            my_cron,
+            notify_payload['interval_in_minutes'],
+            notify_payload['start_hour'],
+            notify_payload['end_hour'],
+            command,
+            generate_comment(notify_payload['id'])
+        )
         print("Set job for " + notify_payload['id'])
 
 
-def write_interval(job, my_cron, interval_in_minutes, start_hour, end_hour):
+def write_interval(my_cron, interval_in_minutes, start_hour, end_hour, command, comment):
+    offset = int(int(datetime.datetime.now(
+        pytz.timezone(os.environ['TIMEZONE'])).strftime('%z'))/100)
+    print("Offset: " + str(offset))
+    job = my_cron.new(command=command, comment=comment)
     s = " * * *"
-    s_hour = start_hour.split(':')[0]
-    e_hour = int(end_hour.split(':')[0]) - 1
-    s = s_hour + "-" + str(e_hour) + s
+    # adjust time zone here
+    s_hour = (int(start_hour.split(':')[0]) - offset) % 24
+    e_hour = (int(end_hour.split(':')[0]) - offset) % 24
+    e_hour_decremented = (e_hour - 1) % 24
+    if s_hour >= e_hour and e_hour != 0:
+        s = str(s_hour) + "-23,0-" + str(e_hour_decremented) + s
+    else:
+        s = str(s_hour) + "-" + str(e_hour_decremented) + s
     minutes = 0
     if interval_in_minutes < 60:
         minutes = "*/" + str(interval_in_minutes)
     s = str(minutes) + " " + str(s)
+    print(s)
     job.setall(s)
     my_cron.write()
-    print("Set " + s)
-    if interval_in_minutes < 60:
-        # Need to set the last one
-        other_job = job
-        print("Set " + "0 " + str(e_hour + 1) + " * * *")
-        job.setall("0 " + str(e_hour + 1) + " * * *")
-        my_cron.write()
+
+    # Need to set the last one
+    # TODO: decide how to handle non hour intervals
+    other_job = my_cron.new(command=command, comment=comment)
+    print("Set " + "0 " + str(e_hour) + " * * *")
+    other_job.setall("0 " + str(e_hour) + " * * *")
+    my_cron.write()
 
 
 def delete_cron(my_cron, report_record_id):
@@ -63,7 +81,6 @@ def delete_cron(my_cron, report_record_id):
         if job.comment == generate_comment(report_record_id):
             my_cron.remove(job)
             my_cron.write()
-            break
     print("Deleted job for " + report_record_id)
 
 
@@ -104,6 +121,7 @@ def create_json(dict_item):
     return data_obj
 
 
+print("time zone: " + str(os.environ['TIMEZONE']))
 conn = psycopg2.connect(user=os.environ['POSTGRES_USER'], database=os.environ['POSTGRES_DB'],
                         host=os.environ['DB_SERVER'], password=os.environ['POSTGRES_PASSWORD'])
 
