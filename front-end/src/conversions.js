@@ -28,7 +28,7 @@ export const timeToIntegerMinutes = (line) => {
 export const UTCDefaultToLocalTimeZone = (time) => {
   var date = new Date(time);
   var offset = date.getTimezoneOffset();
-  var newDate = new Date(date.getTime() - offset * 60 * 1000);
+  var newDate = new Date(date.getTime() - offset * 60 * 1000); //date conversion
   var year = newDate.getFullYear();
   var month = newDate.getMonth() + 1;
   var num_date = newDate.getDate();

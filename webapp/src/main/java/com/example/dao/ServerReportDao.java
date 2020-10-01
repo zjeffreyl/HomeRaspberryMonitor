@@ -2,6 +2,7 @@ package com.example.dao;
 
 import com.example.model.ServerReport;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -24,4 +25,6 @@ public interface ServerReportDao {
     int updateServerReportById(UUID id, ServerReport serverReport);
 
     Optional<ServerReport> selectServerReportById(UUID id);
+
+    Timestamp mostRecentServerReportTimestamp();
 }

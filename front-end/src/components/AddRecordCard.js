@@ -31,6 +31,8 @@ class AddRecordCard extends Component {
 
   intervals = ["10 minutes", "15 minutes", "30 minutes", "1 hour", "3 hours"];
 
+  maxNumberOfRecords = 10;
+
   static propTypes = {
     createRecord: PropTypes.func.isRequired,
     fetchRecords: PropTypes.func.isRequired,
@@ -71,6 +73,11 @@ class AddRecordCard extends Component {
       this.setState({
         visible: true,
         message: "Record name already exists",
+      });
+    } else if (this.props.records.length >= this.maxNumberOfRecords) {
+      this.setState({
+        visible: true,
+        message: "Number of records limited to " + this.maxNumberOfRecords,
       });
     } else {
       const start_time = this.getCurrentFormattedDate();

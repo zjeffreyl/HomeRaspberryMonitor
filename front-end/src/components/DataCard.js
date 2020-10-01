@@ -1,28 +1,92 @@
-import React, { Component } from "react";
-import { Card, CardBody, Row, Col, CardTitle } from "reactstrap";
+import React, { useState } from "react";
+import {
+  Card,
+  CardBody,
+  CardFooter,
+  Row,
+  Col,
+  CardTitle,
+  Nav,
+  NavItem,
+  TabPane,
+  TabContent,
+  NavLink,
+} from "reactstrap";
+import classnames from "classnames";
 
-export class DataCard extends Component {
-  render() {
-    return (
-      <Card>
-        <CardBody>
-          <Row>
-            <Col>
-              <div>
-                <i src="" />
-              </div>
-            </Col>
-            <Col>
-              <div>
-                <p>{this.props.type.capitalize()}</p>
-                <CardTitle>{this.props.value}</CardTitle>
-              </div>
-            </Col>
-          </Row>
-        </CardBody>
-      </Card>
-    );
-  }
+export default function DataCard(props) {
+  const [activeTab, setActiveTab] = useState("1");
+
+  const toggle = (tab) => {
+    if (activeTab !== tab) setActiveTab(tab);
+  };
+
+  return (
+    <div>
+      <Nav tabs>
+        <NavItem>
+          <NavLink
+            className={classnames({ active: activeTab === "1" })}
+            onClick={() => {
+              toggle("1");
+            }}
+          >
+            Recent
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            className={classnames({ active: activeTab === "2" })}
+            onClick={() => {
+              toggle("2");
+            }}
+          >
+            All Time
+          </NavLink>
+        </NavItem>
+      </Nav>
+      <TabContent activeTab={activeTab}>
+        <TabPane tabId="1">
+          <CardContent
+            type={props.type}
+            value={props.recentData}
+            footer={"Last updated: " + props.latestReportTimestamp}
+          />
+        </TabPane>
+        <TabPane tabId="2">
+          <CardContent
+            type={props.type}
+            value={props.historyData}
+            footer="Since first report"
+          />
+        </TabPane>
+      </TabContent>
+    </div>
+  );
 }
 
-export default DataCard;
+const CardContent = (props) => (
+  <Card>
+    <CardBody>
+      <Row>
+        <Col>
+          <div>
+            <i src="" />
+          </div>
+        </Col>
+        <Col>
+          <div>
+            <p>{props.type.charAt(0).toUpperCase() + props.type.slice(1)}</p>
+            <CardTitle>{props.value}</CardTitle>
+          </div>
+        </Col>
+      </Row>
+    </CardBody>
+    <CardFooter>
+      <div>
+        <i />
+        {props.footer}
+      </div>
+    </CardFooter>
+  </Card>
+);

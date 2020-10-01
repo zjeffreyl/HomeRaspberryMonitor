@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.decimal4j.util.DoubleRounder;
+
 import javax.validation.constraints.NotNull;
 
 public class ServerReport {
@@ -36,15 +38,15 @@ public class ServerReport {
     public UUID getId() { return id; }
 
     public double getDownload() {
-        return download;
+        return DoubleRounder.round(download, 3);
     }
 
     public double getUpload() {
-        return upload;
+        return DoubleRounder.round(upload, 3);
     }
 
     public double getPing() {
-        return ping;
+        return DoubleRounder.round(ping, 3);
     }
 
     public Timestamp getTimestamp()
@@ -56,6 +58,6 @@ public class ServerReport {
 
     @Override
     public String toString() {
-        return "Server Report " + id.toString() + " at " + recordedAt.toString()+ " [download=" + download + ", upload=" + upload + ", ping= " + ping + "] +  from " + reportRecordId;
+        return "Server Report " + id.toString() + " at " + recordedAt.toString()+ " [download=" + getDownload() + ", upload=" + getUpload() + ", ping= " + getPing() + "] +  from " + reportRecordId;
     }
 }
