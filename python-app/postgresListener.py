@@ -47,14 +47,11 @@ def schedule_cron(notify_payload, my_cron, report_record_id, server_id):
 
 
 def write_interval(my_cron, interval_in_minutes, start_hour, end_hour, command, comment):
-    offset = int(int(datetime.datetime.now(
-        pytz.timezone(os.environ['TIMEZONE'])).strftime('%z'))/100)
-    print("Offset: " + str(offset))
     job = my_cron.new(command=command, comment=comment)
     s = " * * *"
     # adjust time zone here
-    s_hour = (int(start_hour.split(':')[0]) - offset) % 24
-    e_hour = (int(end_hour.split(':')[0]) - offset) % 24
+    s_hour = (int(start_hour.split(':')[0])) % 24
+    e_hour = (int(end_hour.split(':')[0])) % 24
     e_hour_decremented = (e_hour - 1) % 24
     if s_hour >= e_hour and e_hour != 0:
         s = str(s_hour) + "-23,0-" + str(e_hour_decremented) + s

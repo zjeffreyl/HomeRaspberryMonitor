@@ -41,3 +41,15 @@ export const UTCDefaultToLocalTimeZone = (time) => {
     month < 10 ? `0${month}` : `${month}`
   }${dash}${num_date} ${hours}:${minutes}`;
 };
+
+export const LocalTimeToUTC = (time) => {
+  var date = new Date();
+  var offsetInHours = date.getTimezoneOffset() / 60;
+  var hours = time.split(":")[0];
+  var hoursInUTC = (parseInt(hours) + offsetInHours) % 24;
+  return hoursInUTC + ":" + time.split(":")[1];
+};
+export const getLocalTime = (date) => {
+  console.log(date);
+  return date.toLocaleTimeString([], { hour: "2-digit", minutes: "2-digit" });
+};

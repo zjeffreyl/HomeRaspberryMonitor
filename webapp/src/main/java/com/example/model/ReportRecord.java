@@ -1,8 +1,10 @@
 package com.example.model;
 
+import com.example.SqlTimeDeserializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.sql.Timestamp;
 import java.sql.Time;
@@ -26,9 +28,11 @@ public class ReportRecord {
     public ReportRecord(@JsonProperty("id") UUID id, @JsonProperty("record_name") String name,
             @JsonProperty("start_time") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "UTC") Timestamp startTime,
             @JsonProperty("end_time") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "UTC") Timestamp endTime,
-            @JsonProperty("start_hour") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "UTC") Time startHour,
-            @JsonProperty("end_hour") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "UTC") Time endHour,
+            @JsonProperty("start_hour") @JsonFormat(pattern = "HH:mm", timezone = "UTC") @JsonDeserialize(using=SqlTimeDeserializer.class) Time startHour,
+            @JsonProperty("end_hour") @JsonFormat(pattern = "HH:mm", timezone = "UTC") @JsonDeserialize(using=SqlTimeDeserializer.class) Time endHour,
             @JsonProperty("server_id") int serverId, @JsonProperty("interval_in_minutes") int intervalInMinutes) {
+        System.out.println(startTime);
+        System.out.println(startHour + " - " + endHour);
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;

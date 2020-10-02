@@ -13,7 +13,7 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import { createRecord, fetchRecords } from "../actions/recordActions";
 import { connect } from "react-redux";
-import { timeToIntegerMinutes } from "../conversions";
+import { timeToIntegerMinutes, LocalTimeToUTC } from "../conversions";
 import TimePicker from "react-time-picker";
 
 class AddRecordCard extends Component {
@@ -60,7 +60,7 @@ class AddRecordCard extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    const {
+    var {
       record_name,
       server_id,
       interval,
@@ -69,6 +69,8 @@ class AddRecordCard extends Component {
       start_hour,
       end_hour,
     } = this.state;
+
+    console.log("Current Time: " + start_hour + " - " + end_hour);
     if (this.recordsNameExists(record_name)) {
       this.setState({
         visible: true,
@@ -84,6 +86,9 @@ class AddRecordCard extends Component {
       const end_time = "";
       //need to handle minutes to hours conversion
       const interval_in_minutes = timeToIntegerMinutes(interval);
+      start_hour = LocalTimeToUTC(start_hour);
+      end_hour = LocalTimeToUTC(end_hour);
+      console.log("UTC: " + start_hour + " - " + end_hour);
       const report = {
         record_name,
         server_id,

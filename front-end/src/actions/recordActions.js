@@ -14,7 +14,6 @@ export const fetchRecords = () => (dispatch) => {
 };
 
 export const createRecord = (recordData) => (dispatch) => {
-  console.log(recordData);
   axios
     .post(`http://localhost:8080/api/reportRecord`, recordData)
     .then((res) => {

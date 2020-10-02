@@ -59,7 +59,7 @@ export class AllRecordsCard extends Component {
                 <th>Server Name</th>
                 <th>Recording Hours</th>
                 <th>Interval</th>
-                <th>Time Created</th>
+                <th>Created At</th>
                 <th />
               </tr>
             </thead>
