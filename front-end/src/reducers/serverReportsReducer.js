@@ -42,6 +42,7 @@ export default function (state = initialState, action) {
         ...state,
         latestReportTimestamp: action.payload,
       };
+    //TODO: Set the labels
     default:
       return state;
   }

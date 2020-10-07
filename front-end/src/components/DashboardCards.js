@@ -10,6 +10,7 @@ import {
   fetchLatestReportTimestamp,
 } from "../actions/serverReportActions";
 import { connect } from "react-redux";
+import { bitsToPs, roundByN } from "../formats";
 
 class DashboardCards extends Component {
   static propTypes = {
@@ -37,20 +38,20 @@ class DashboardCards extends Component {
       <Row>
         <DataCard
           type="ping"
-          recentData={this.props.recentData[0]}
-          historyData={this.props.historyData[0]}
+          recentData={roundByN(this.props.recentData[0], 0)}
+          historyData={roundByN(this.props.historyData[0], 0)}
           latestReportTimestamp={this.props.latestReportTimestamp}
         />
         <DataCard
           type="download"
-          recentData={this.props.recentData[1]}
-          historyData={this.props.historyData[1]}
+          recentData={bitsToPs(this.props.recentData[1])}
+          historyData={bitsToPs(this.props.historyData[1])}
           latestReportTimestamp={this.props.latestReportTimestamp}
         />
         <DataCard
           type="upload"
-          recentData={this.props.recentData[2]}
-          historyData={this.props.historyData[2]}
+          recentData={bitsToPs(this.props.recentData[2])}
+          historyData={bitsToPs(this.props.historyData[2])}
           latestReportTimestamp={this.props.latestReportTimestamp}
         />
       </Row>

@@ -29,27 +29,44 @@ export const UTCDefaultToLocalTimeZone = (time) => {
   var date = new Date(time);
   var offset = date.getTimezoneOffset();
   var newDate = new Date(date.getTime() - offset * 60 * 1000); //date conversion
-  var year = newDate.getFullYear();
-  var month = newDate.getMonth() + 1;
-  var num_date = newDate.getDate();
   var hours = newDate.getHours();
   var minutes = newDate.getMinutes();
   hours = hours <= 9 ? "0" + hours : hours;
   minutes = minutes <= 9 ? "0" + minutes : minutes;
-  var dash = "-";
-  return `${year}${dash}${
-    month < 10 ? `0${month}` : `${month}`
-  }${dash}${num_date} ${hours}:${minutes}`;
+  var time = hours + ":" + minutes;
+  const options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  return militaryToAmPm(time) + " " + newDate.toDateString(options);
 };
 
-export const LocalTimeToUTC = (time) => {
+export const LocalTimeToUTC = (localTime) => {
   var date = new Date();
   var offsetInHours = date.getTimezoneOffset() / 60;
-  var hours = time.split(":")[0];
+  var hours = localTime.split(":")[0];
   var hoursInUTC = (parseInt(hours) + offsetInHours) % 24;
-  return hoursInUTC + ":" + time.split(":")[1];
+  return hoursInUTC + ":" + localTime.split(":")[1];
 };
-export const getLocalTime = (date) => {
-  console.log(date);
-  return date.toLocaleTimeString([], { hour: "2-digit", minutes: "2-digit" });
+
+export const LocalDateToUTC = (date) => {
+  return date.toISOString();
+};
+
+export const UTCTimeToLocal = (utcTime) => {
+  var date = new Date();
+  var utcHours = utcTime.split(":")[0];
+  var utcMinutes = utcTime.split(":")[1];
+  var offsetInHours = date.getTimezoneOffset() / 60;
+  var hoursInLocal = (24 + parseInt(utcHours) - offsetInHours) % 24;
+  return militaryToAmPm(hoursInLocal + ":" + utcMinutes);
+};
+
+export const militaryToAmPm = (militaryTime) => {
+  var hours = militaryTime.split(":")[0] % 12;
+  var minutes = militaryTime.split(":")[1];
+  var ampm = hours >= 12 ? " P.M." : " A.M.";
+  return hours + ":" + minutes + ampm;
 };

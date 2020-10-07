@@ -21,7 +21,7 @@ const dashboard24HoursPerformanceChart = {
         borderColor: "#fbc658",
         backgroundColor: "transparent",
         pointBorderColor: "#fbc658",
-        pointRadius: 4,
+        pointRadius: 1,
         pointHoverRadius: 4,
         pointBorderWidth: 8,
       },

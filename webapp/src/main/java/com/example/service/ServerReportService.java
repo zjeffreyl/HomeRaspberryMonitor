@@ -51,4 +51,8 @@ public class ServerReportService {
     {
         return serverReportDao.mostRecentServerReportTimestamp();
     }
+
+    public List<ServerReport> getServerInTimestampRangeByRecordId(Timestamp startDate, Timestamp endDate, UUID reportRecordId) {
+        return serverReportDao.selectServerReportByDate(startDate, endDate, reportRecordId);
+    }
 }

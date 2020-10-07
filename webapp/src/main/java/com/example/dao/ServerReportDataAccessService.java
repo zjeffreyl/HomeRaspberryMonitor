@@ -1,5 +1,6 @@
 package com.example.dao;
 
+import com.example.model.ReportRecord;
 import com.example.model.ServerReport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -100,5 +102,20 @@ public class ServerReportDataAccessService implements ServerReportDao {
     public Timestamp mostRecentServerReportTimestamp() {
         final String sql = "SELECT MAX(recorded_at) FROM server_report";
         return jdbcTemplate.queryForObject(sql, ((resultSet, i) -> resultSet.getTimestamp("max")));
+    }
+
+    @Override
+    public List<ServerReport> selectServerReportByDate(Timestamp startDate, Timestamp endDate, UUID reportRecordId) {
+        System.out.println(startDate);
+        System.out.println(endDate);
+        final String sql = "SELECT * FROM server_report WHERE recorded_at >= ? AND recorded_at <= ? AND report_record_id = ?";
+        List<ServerReport> serverReports = jdbcTemplate.query(sql, new Object[] { startDate, endDate, reportRecordId },
+                ((resultSet, i) -> {
+                    return new ServerReport(UUID.fromString(resultSet.getString("id")), resultSet.getDouble("download"),
+                            resultSet.getDouble("upload"), resultSet.getDouble("ping"),
+                            resultSet.getTimestamp("recorded_at"),
+                            UUID.fromString(resultSet.getString("report_record_id")));
+                }));
+        return serverReports;
     }
 }

@@ -2,10 +2,12 @@ package com.example.service;
 
 import com.example.dao.ServerDao;
 import com.example.model.Server;
+import com.example.model.ServerReport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -36,6 +38,4 @@ public class ServerService {
     {
         return serverDao.deleteServers();
     }
-
-    
 }

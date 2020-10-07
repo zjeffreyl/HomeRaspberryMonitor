@@ -4,6 +4,7 @@ import com.example.model.ServerReport;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,4 +28,6 @@ public interface ServerReportDao {
     Optional<ServerReport> selectServerReportById(UUID id);
 
     Timestamp mostRecentServerReportTimestamp();
+
+    List<ServerReport> selectServerReportByDate(Timestamp startDate, Timestamp endDate, UUID reportRecordId);
 }

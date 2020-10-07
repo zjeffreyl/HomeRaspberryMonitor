@@ -5,6 +5,7 @@ import com.example.model.ServerReport;
 import com.example.service.ReportRecordService;
 import com.example.service.ServerReportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -75,20 +76,19 @@ public class ServerReportController {
                 double sum_download = 0;
                 double sum_upload = 0;
                 int nonEmptyRecords = 0;
-                for(ReportRecord record: records)
-                {
-                        List<ServerReport> serverReports = serverReportService.getAllServerReportsByRecordId(record.getId());
-                        if(serverReports.size() > 0)
-                        {
+                for (ReportRecord record : records) {
+                        List<ServerReport> serverReports = serverReportService
+                                        .getAllServerReportsByRecordId(record.getId());
+                        if (serverReports.size() > 0) {
                                 sum_ping += serverReports.get(0).getPing();
                                 sum_download += serverReports.get(0).getDownload();
                                 sum_upload += serverReports.get(0).getUpload();
                                 nonEmptyRecords++;
                         }
                 }
-                result[0] = sum_ping/nonEmptyRecords;
-                result[1] = sum_download/nonEmptyRecords;
-                result[2] = sum_upload/nonEmptyRecords;
+                result[0] = sum_ping / nonEmptyRecords;
+                result[1] = sum_download / nonEmptyRecords;
+                result[2] = sum_upload / nonEmptyRecords;
                 return result;
         }
 
@@ -101,15 +101,14 @@ public class ServerReportController {
                 double sum_download = 0;
                 double sum_upload = 0;
                 int nonEmptyRecords = 0;
-                for(ReportRecord record : records)
-                {
+                for (ReportRecord record : records) {
                         double record_average_ping = 0;
                         double record_average_download = 0;
                         double record_average_upload = 0;
 
-                        List<ServerReport> serverReports = serverReportService.getAllServerReportsByRecordId(record.getId());
-                        for(ServerReport report : serverReports)
-                        {
+                        List<ServerReport> serverReports = serverReportService
+                                        .getAllServerReportsByRecordId(record.getId());
+                        for (ServerReport report : serverReports) {
                                 record_average_ping += report.getPing();
                                 record_average_download += report.getDownload();
                                 record_average_upload += report.getUpload();
@@ -126,8 +125,19 @@ public class ServerReportController {
 
         @GetMapping(path = "lastRecordedDate")
         @CrossOrigin(origins = "http://localhost:3000")
-        public Timestamp lastRecordedDate()
-        {
+        public Timestamp lastRecordedDate() {
                 return serverReportService.getMostRecentTimestamp();
+        }
+
+        @GetMapping(path = "timeRange/startDate={startDate}endDate={endDate}")
+        @CrossOrigin(origins = "http://localhost:3000")
+        public Map<UUID, List<ServerReport>> serverReport(@PathVariable("startDate") Timestamp startDate,
+                        @PathVariable("endDate") Timestamp endDate) {
+                Map<UUID, List<ServerReport>> map = new HashMap<>();
+                for (ReportRecord record : reportRecordService.getAllReportRecords()) {
+                        map.put(record.getId(), serverReportService.getServerInTimestampRangeByRecordId(startDate,
+                                        endDate, record.getId()));
+                }
+                return map;
         }
 }

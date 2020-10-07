@@ -11,7 +11,12 @@ import PropTypes from "prop-types";
 import { deleteServerReports } from "../actions/serverReportActions";
 import { fetchRecords, deleteRecord } from "../actions/recordActions";
 import { connect } from "react-redux";
-import { minutesToString, UTCDefaultToLocalTimeZone } from "../conversions";
+import {
+  LocalTimeToUTC,
+  minutesToString,
+  UTCDefaultToLocalTimeZone,
+  UTCTimeToLocal,
+} from "../conversions";
 
 export class AllRecordsCard extends Component {
   static propTypes = {
@@ -70,8 +75,8 @@ export class AllRecordsCard extends Component {
                   <td>{record.record_name}</td>
                   <td>{this.getServerNameFromId(record.server_id)}</td>
                   <td>
-                    {this.trimTime(record.start_hour)} -{" "}
-                    {this.trimTime(record.end_hour)}
+                    {UTCTimeToLocal(record.start_hour)} -{" "}
+                    {UTCTimeToLocal(record.end_hour)}
                   </td>
                   <td>{minutesToString(record.interval_in_minutes)}</td>
                   <td>{UTCDefaultToLocalTimeZone(record.start_time)}</td>

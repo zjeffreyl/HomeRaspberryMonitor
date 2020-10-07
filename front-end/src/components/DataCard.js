@@ -13,6 +13,7 @@ import {
   NavLink,
 } from "reactstrap";
 import classnames from "classnames";
+import { formatDate } from "../formats";
 
 export default function DataCard(props) {
   const [activeTab, setActiveTab] = useState("1");
@@ -20,7 +21,6 @@ export default function DataCard(props) {
   const toggle = (tab) => {
     if (activeTab !== tab) setActiveTab(tab);
   };
-
   return (
     <div>
       <Nav tabs>
@@ -50,7 +50,7 @@ export default function DataCard(props) {
           <CardContent
             type={props.type}
             value={props.recentData}
-            footer={"Last updated: " + props.latestReportTimestamp}
+            footer={"Last updated: " + formatDate(props.latestReportTimestamp)}
           />
         </TabPane>
         <TabPane tabId="2">
