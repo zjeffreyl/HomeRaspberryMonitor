@@ -31,6 +31,7 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     case SET_CHART_TO_PING:
+      console.log(state.ping);
       return {
         ...state,
         options: {
@@ -53,6 +54,7 @@ export default function (state = initialState, action) {
         },
       }
     case SET_CHART_TO_DOWNLOAD:
+      console.log(state.download);
       return {
         ...state,
         options: {
@@ -76,6 +78,7 @@ export default function (state = initialState, action) {
 
       }
     case SET_CHART_TO_UPLOAD:
+      console.log(state.upload);
       return {
         ...state,
         options: {
