@@ -65,8 +65,20 @@ export const UTCTimeToLocal = (utcTime) => {
 };
 
 export const militaryToAmPm = (militaryTime) => {
-  var hours = militaryTime.split(":")[0] % 12;
+  var hour = militaryTime.split(":")[0];
   var minutes = militaryTime.split(":")[1];
-  var ampm = hours >= 12 ? " P.M." : " A.M.";
-  return hours + ":" + minutes + ampm;
+  var suffix = hour >= 12 ? "PM" : "AM";
+  if(hour > 0 && hour <= 12)
+  {
+    hour = hour;
+  }
+  else if(hour - 12)
+  {
+    hour -= 12;
+  }
+  else if(hour == 0)
+  {
+    hour = 12;
+  }
+  return hour + ":" + minutes + " " + suffix;
 };

@@ -12,21 +12,17 @@ import javax.validation.constraints.NotNull;
 public class ServerReport {
 
     private final UUID id;
-    private double download;
-    private double upload;
-    private double ping;
+    private Double download;
+    private Double upload;
+    private Double ping;
     private final UUID reportRecordId;
     @NotNull
     private Timestamp recordedAt;
 
-    public ServerReport(@JsonProperty("id") UUID id,
-                        @JsonProperty("download") double download,
-                        @JsonProperty("upload") double upload,
-                        @JsonProperty("ping") double ping,
-                        @JsonProperty("recorded_at") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone="UTC") Timestamp recordedAt,
-                        @JsonProperty("report_record_id") UUID reportRecordId
-    )
-    {
+    public ServerReport(@JsonProperty("id") UUID id, @JsonProperty("download") Double download,
+            @JsonProperty("upload") Double upload, @JsonProperty("ping") Double ping,
+            @JsonProperty("recorded_at") @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "UTC") Timestamp recordedAt,
+            @JsonProperty("report_record_id") UUID reportRecordId) {
         this.id = id;
         this.download = download;
         this.upload = upload;
@@ -35,29 +31,36 @@ public class ServerReport {
         this.recordedAt = recordedAt;
     }
 
-    public UUID getId() { return id; }
+    public UUID getId() {
+        return id;
+    }
 
-    public double getDownload() {
+    public Double getDownload() {
+        if(download == null) return null;
         return DoubleRounder.round(download, 3);
     }
 
-    public double getUpload() {
+    public Double getUpload() {
+        if(upload == null) return null;
         return DoubleRounder.round(upload, 3);
     }
 
-    public double getPing() {
+    public Double getPing() {
+        if(ping == null) return null;
         return DoubleRounder.round(ping, 3);
     }
 
-    public Timestamp getTimestamp()
-    {
+    public Timestamp getTimestamp() {
         return recordedAt;
     }
 
-    public UUID getReportRecordId() { return reportRecordId; }
+    public UUID getReportRecordId() {
+        return reportRecordId;
+    }
 
     @Override
     public String toString() {
-        return "Server Report " + id.toString() + " at " + recordedAt.toString()+ " [download=" + getDownload() + ", upload=" + getUpload() + ", ping= " + getPing() + "] +  from " + reportRecordId;
+        return "Server Report " + id.toString() + " at " + recordedAt.toString() + " [download=" + getDownload()
+                + ", upload=" + getUpload() + ", ping= " + getPing() + "] +  from " + reportRecordId;
     }
 }

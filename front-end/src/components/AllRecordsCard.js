@@ -16,7 +16,7 @@ import {
   minutesToString,
   UTCDefaultToLocalTimeZone,
   UTCTimeToLocal,
-} from "../conversions";
+} from "../utilities/conversions";
 
 export class AllRecordsCard extends Component {
   static propTypes = {

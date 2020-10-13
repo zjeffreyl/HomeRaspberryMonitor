@@ -13,6 +13,8 @@ import { Link } from "react-router-dom";
 import { Line } from "react-chartjs-2";
 import DashboardCards from "../components/DashboardCards";
 import DashboardContent from "../components/DashboardContent";
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
 
 export default function DashboardView() {
   const [activeTab, setActiveTab] = useState("1");
@@ -20,6 +22,15 @@ export default function DashboardView() {
   const toggle = (tab) => {
     if (activeTab !== tab) setActiveTab(tab);
   };
+
+  const options = {
+    title: {
+      text: 'My chart'
+    },
+    series: [{
+      data: [{"name": [1, 2, 3]}, [2,3,4]]
+    }]
+  }
 
   return (
     <div>
@@ -66,7 +77,10 @@ export default function DashboardView() {
         <TabPane tabId="2">
           <Row>
             <Col>
-              <h2>Tab 2 Contents</h2>
+              <HighchartsReact
+                highcharts={Highcharts}
+                options={options}
+              />
             </Col>
           </Row>
         </TabPane>

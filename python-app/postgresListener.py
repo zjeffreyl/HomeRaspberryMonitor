@@ -12,6 +12,7 @@ import pytz
 
 URL = "http://raspberry-web-app:8080/api/reportRecord/"
 HEALTH_URL = "http://raspberry-web-app:8080/actuator/health/"
+SERVER_REPORT_URL = "http://raspberry-web-app:8080/api/serverReport/"
 raspberry_comment = "Raspberry Pi speed test id: "
 
 
@@ -41,13 +42,13 @@ def schedule_cron(notify_payload, my_cron, report_record_id, server_id):
             notify_payload['start_hour'],
             notify_payload['end_hour'],
             command,
-            generate_comment(notify_payload['id'])
+            report_record_id
         )
-        print("Set job for " + notify_payload['id'])
+        print("Set job for " + report_record_id)
 
 
-def write_interval(my_cron, interval_in_minutes, start_hour, end_hour, command, comment):
-    job = my_cron.new(command=command, comment=comment)
+def write_interval(my_cron, interval_in_minutes, start_hour, end_hour, command, record_id):
+    job = my_cron.new(command=command, comment=generate_comment(record_id))
     s = " * * *"
     # adjust time zone here
     s_hour = (int(start_hour.split(':')[0])) % 24
@@ -67,10 +68,20 @@ def write_interval(my_cron, interval_in_minutes, start_hour, end_hour, command, 
 
     # Need to set the last one
     # TODO: decide how to handle non hour intervals
-    other_job = my_cron.new(command=command, comment=comment)
+    other_job = my_cron.new(
+        command=command, comment=generate_comment(record_id))
     print("Set " + "0 " + str(e_hour) + " * * *")
     other_job.setall("0 " + str(e_hour) + " * * *")
     my_cron.write()
+
+    # Write a another job
+    if s_hour != e_hour:
+        add_null_report = '/usr/bin/python3 {}/nullReport.py {} >> {}/cron.log 2>&1'.format(
+            os.environ['PWD'], record_id, os.environ['PWD'])
+        delimit_job = my_cron.new(
+            command=add_null_report, comment=generate_comment(record_id))
+        delimit_job.setall("1 " + str(e_hour) + " * * *")
+        my_cron.write()
 
 
 def delete_cron(my_cron, report_record_id):
@@ -93,7 +104,7 @@ def process_payload(notify_payload, my_cron):
 # refreshing the crontab based on the existing database
 
 
-def refresh_crontab(my_cron):
+def refresh(my_cron):
     for job in my_cron:
         if raspberry_comment in job.comment:
             my_cron.remove(job)
@@ -102,6 +113,13 @@ def refresh_crontab(my_cron):
     data = res.json()
     print(str(data))
     for dict_item in data:
+        # write an empty one to space data points
+        recorded_at = datetime.datetime.now()
+        empty_data_obj = {
+            'recorded_at': recorded_at.strftime("%Y-%m-%-d %-H:%-M"),
+            'report_record_id': dict_item['id']
+        }
+        requests.post(SERVER_REPORT_URL, json=empty_data_obj)
         print("Scheduling " + str(dict_item['id']))
         schedule_cron(dict_item, my_cron,
                       dict_item['id'], dict_item['server_id'])
@@ -130,7 +148,7 @@ serverFinder.update_servers(cursor)
 
 # Remove all in crontab and put all in postgres db
 my_cron = CronTab(user=os.environ['USER'])
-refresh_crontab(my_cron)
+refresh(my_cron)
 cursor.execute('LISTEN report_records_updates;')
 
 while True:

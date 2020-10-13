@@ -21,7 +21,7 @@ public class ReportRecordDataAccessService implements ReportRecordDao {
 
     @Override
     public ReportRecord insertReportRecord(UUID id, ReportRecord reportRecord) {
-        String sql = "INSERT INTO report_record VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO report_record VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
         Object[] params = new Object[] { id, reportRecord.getName(), reportRecord.getStartTime(),
                 reportRecord.getEndTime(), reportRecord.getStartHour(), reportRecord.getEndHour(),
                 reportRecord.getServerId(), reportRecord.getIntervalInMinutes() };
@@ -37,7 +37,7 @@ public class ReportRecordDataAccessService implements ReportRecordDao {
 
     @Override
     public List<ReportRecord> selectAllReportRecords() {
-        String sql = "SELECT id, record_name, start_time, end_time, start_hour, end_hour, server_id, interval_in_minutes FROM report_record";
+        String sql = "SELECT id, record_name, start_time, end_time, start_hour, end_hour, server_id, interval_in_minutes FROM report_record;";
         return jdbcTemplate.query(sql, ((resultSet, i) -> {
             return new ReportRecord(UUID.fromString(resultSet.getString("id")), resultSet.getString("record_name"),
                     resultSet.getTimestamp("start_time"), resultSet.getTimestamp("end_time"),
@@ -48,7 +48,7 @@ public class ReportRecordDataAccessService implements ReportRecordDao {
 
     @Override
     public ReportRecord deleteReportRecordById(UUID id) {
-        final String sql = "DELETE FROM report_record WHERE id = ?";
+        final String sql = "DELETE FROM report_record WHERE id = ?;";
         Optional<ReportRecord> reportRecord = selectReportRecordById(id);
         try {
             jdbcTemplate.update(sql, id);
@@ -61,7 +61,7 @@ public class ReportRecordDataAccessService implements ReportRecordDao {
     @Override
     public int updateReportRecordById(UUID id, ReportRecord reportRecord) {
         final String sql = "UPDATE report_record SET record_name = ?, start_time = ?, end_time = ?, start_hour = ?, end_hour = ?, server_id = ?, interval_in_minutes = ? WHERE id = \'"
-                + id + "\'";
+                + id + "\';";
         try {
             jdbcTemplate.update(sql,
                     new Object[] { reportRecord.getName(), reportRecord.getStartTime(), reportRecord.getStartHour(),
@@ -76,7 +76,7 @@ public class ReportRecordDataAccessService implements ReportRecordDao {
 
     @Override
     public Optional<ReportRecord> selectReportRecordById(UUID id) {
-        final String sql = "SELECT * FROM report_record WHERE id = ?";
+        final String sql = "SELECT * FROM report_record WHERE id = ?;";
         ReportRecord report = jdbcTemplate.queryForObject(sql, new Object[] { id }, ((resultSet, i) -> {
             return new ReportRecord(UUID.fromString(resultSet.getString("id")), resultSet.getString("record_name"),
                     resultSet.getTimestamp("start_time"), resultSet.getTimestamp("end_time"),

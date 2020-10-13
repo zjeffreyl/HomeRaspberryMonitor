@@ -13,7 +13,7 @@ import {
   NavLink,
 } from "reactstrap";
 import classnames from "classnames";
-import { formatDate } from "../formats";
+import { formatDate } from "../utilities/formats";
 
 export default function DataCard(props) {
   const [activeTab, setActiveTab] = useState("1");

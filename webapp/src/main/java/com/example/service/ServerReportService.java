@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -52,7 +53,7 @@ public class ServerReportService {
         return serverReportDao.mostRecentServerReportTimestamp();
     }
 
-    public List<ServerReport> getServerInTimestampRangeByRecordId(Timestamp startDate, Timestamp endDate, UUID reportRecordId) {
-        return serverReportDao.selectServerReportByDate(startDate, endDate, reportRecordId);
+    public List<List<Object[]>> getPerformanceDataInTimestampRangeByRecordId(Timestamp startDate, Timestamp endDate, UUID reportRecordId) {
+        return serverReportDao.getPerformanceDataByDate(startDate, endDate, reportRecordId);
     }
 }

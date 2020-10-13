@@ -1,33 +1,53 @@
 import React, { Component } from "react";
 import { Card, CardHeader, CardTitle, CardBody, Input } from "reactstrap";
-import { Line } from "react-chartjs-2";
-import { dashboard24HoursPerformanceChart } from "../variables/performanceChart";
-import { fetchDataFromStartToEnd } from "../actions/serverReportActions";
+import "chart.js";
+import { fetchDataFromStartToEnd, setChartToPing, setChartToDownload, setChartToUpload } from "../actions/chartAction";
 import { connect } from "react-redux";
-import { LocalDateToUTC } from "../conversions";
+import { LocalDateToUTC } from "../utilities/conversions";
+import PropTypes from "prop-types";
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
 
 const measurements = ["Ping", "Download", "Upload"];
+
 class DataChart extends Component {
   state = {
-    dropDownValue: measurements[0],
-    dropdownOpen: false,
+    dropDownValue: "",
+  };
+
+  static propTypes = {
+    options: PropTypes.object.isRequired,
+    fetchDataFromStartToEnd: PropTypes.func.isRequired,
+    setChartToPing: PropTypes.func.isRequired,
+    setChartToDownload: PropTypes.func.isRequired,
+    setChartToUpload: PropTypes.func.isRequired,
   };
 
   constructor(props) {
     super(props);
-    this.onChange = this.onChange.bind(this);
   }
 
   componentDidMount() {
     var current = LocalDateToUTC(new Date());
     var tsYesterday = LocalDateToUTC(new Date(Date.now() - 86400 * 1000));
-
     this.props.fetchDataFromStartToEnd(tsYesterday, current);
   }
 
-  onChange(e) {
-    console.log(e.target.value);
-    this.setState({ dropDownValue: e.target.value });
+  onChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
+    switch (e.target.value) {
+      case "Ping":
+        this.props.setChartToPing();
+        return;
+      case "Download":
+        this.props.setChartToDownload();
+        return;
+      case "Upload":
+        this.props.setChartToUpload();
+        return;
+      default:
+        return;
+    }
   }
 
   render() {
@@ -36,22 +56,18 @@ class DataChart extends Component {
         <Card>
           <CardHeader>
             <CardTitle md="3">
-              <Input type="select" onClick={this.onChange}>
-                {measurements.map((item, index) => {
-                  return (
-                    <option id={index} key={index}>
-                      {item}
-                    </option>
-                  );
-                })}
+              <Input type="select" onChange={this.onChange} name="dropDownValue" value={this.state.dropDownValue}>
+                {measurements.map((item, index) => (
+                  <option id={index} key={index}>
+                    {item}
+                  </option>
+                ))}
               </Input>
             </CardTitle>
             <CardBody>
-              <Line
-                data={dashboard24HoursPerformanceChart.data}
-                options={dashboard24HoursPerformanceChart.options}
-                width={400}
-                height={100}
+              <HighchartsReact
+                highcharts={Highcharts}
+                options={this.props.options}
               />
             </CardBody>
           </CardHeader>
@@ -62,8 +78,10 @@ class DataChart extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  chartData: state.serverReports.chartData,
+  options: state.chart.options,
 });
+
 export default connect(mapStateToProps, {
   fetchDataFromStartToEnd,
+  setChartToPing, setChartToDownload, setChartToUpload
 })(DataChart);

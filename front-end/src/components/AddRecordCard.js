@@ -13,7 +13,7 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import { createRecord, fetchRecords } from "../actions/recordActions";
 import { connect } from "react-redux";
-import { timeToIntegerMinutes, LocalTimeToUTC } from "../conversions";
+import { timeToIntegerMinutes, LocalTimeToUTC } from "../utilities/conversions";
 import TimePicker from "react-time-picker";
 
 class AddRecordCard extends Component {
@@ -29,9 +29,9 @@ class AddRecordCard extends Component {
     warning_message: "",
   };
 
-  intervals = ["10 minutes", "15 minutes", "30 minutes", "1 hour", "3 hours"];
+  intervals = ["10 minutes", "15 minutes", "30 minutes", "1 hour"];
 
-  maxNumberOfRecords = 10;
+  maxNumberOfRecords = 7;
 
   static propTypes = {
     createRecord: PropTypes.func.isRequired,
@@ -76,7 +76,15 @@ class AddRecordCard extends Component {
         visible: true,
         message: "Record name already exists",
       });
-    } else if (this.props.records.length >= this.maxNumberOfRecords) {
+    } 
+    else if (record_name === null || record_name.match(/^ *$/) !== null)
+    {
+      this.setState({
+        visible: true,
+        message: "Record name is empty"
+      });
+    }
+    else if (this.props.records.length >= this.maxNumberOfRecords) {
       this.setState({
         visible: true,
         message: "Number of records limited to " + this.maxNumberOfRecords,
@@ -88,7 +96,6 @@ class AddRecordCard extends Component {
       const interval_in_minutes = timeToIntegerMinutes(interval);
       start_hour = LocalTimeToUTC(start_hour);
       end_hour = LocalTimeToUTC(end_hour);
-      console.log("UTC: " + start_hour + " - " + end_hour);
       const report = {
         record_name,
         server_id,
@@ -170,7 +177,7 @@ class AddRecordCard extends Component {
             <h4>Add a new Record</h4>
             <Input
               type="text"
-              placeholder="Record Name Optional"
+              placeholder="Record Name"
               name="record_name"
               onChange={this.onChange}
               value={record_name}

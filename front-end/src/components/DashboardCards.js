@@ -10,7 +10,7 @@ import {
   fetchLatestReportTimestamp,
 } from "../actions/serverReportActions";
 import { connect } from "react-redux";
-import { bitsToPs, roundByN } from "../formats";
+import { bitsToPs, roundByN } from "../utilities/formats";
 
 class DashboardCards extends Component {
   static propTypes = {
@@ -34,24 +34,25 @@ class DashboardCards extends Component {
   }
 
   render() {
+    const noData = "No Data Yet";
     return (
       <Row>
         <DataCard
           type="ping"
-          recentData={roundByN(this.props.recentData[0], 0)}
-          historyData={roundByN(this.props.historyData[0], 0)}
+          recentData={this.props.recentData[0] === -1 ? noData : roundByN(this.props.recentData[0], 0)}
+          historyData={this.props.historyData[0] === -1 ? noData : roundByN(this.props.historyData[0], 0)}
           latestReportTimestamp={this.props.latestReportTimestamp}
         />
         <DataCard
           type="download"
-          recentData={bitsToPs(this.props.recentData[1])}
-          historyData={bitsToPs(this.props.historyData[1])}
-          latestReportTimestamp={this.props.latestReportTimestamp}
+          recentData={this.props.recentData[1] === -1 ? noData : bitsToPs(this.props.recentData[1])}
+          historyData={this.props.historyData[1] === -1 ? noData : bitsToPs(this.props.historyData[1])}
+          latestReportTimestamp={this.props.recentData[1] === -1 ? noData : this.props.latestReportTimestamp}
         />
         <DataCard
           type="upload"
-          recentData={bitsToPs(this.props.recentData[2])}
-          historyData={bitsToPs(this.props.historyData[2])}
+          recentData={this.props.recentData[2] === - 1 ? noData : bitsToPs(this.props.recentData[2])}
+          historyData={this.props.historyData[2] === -1 ? noData: bitsToPs(this.props.historyData[2])}
           latestReportTimestamp={this.props.latestReportTimestamp}
         />
       </Row>
