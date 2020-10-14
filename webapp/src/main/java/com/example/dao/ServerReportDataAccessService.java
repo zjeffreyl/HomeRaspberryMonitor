@@ -38,8 +38,8 @@ public class ServerReportDataAccessService implements ServerReportDao {
         String sql = "SELECT id, download, upload, ping, recorded_at, report_record_id FROM server_report WHERE report_record_id = '"
                 + id.toString() + "' ORDER BY recorded_at;";
         List<ServerReport> serverReports = jdbcTemplate.query(sql, ((resultSet, i) -> {
-            return new ServerReport(UUID.fromString(resultSet.getString("id")), resultSet.getObject("download") == null ? null : resultSet.getDouble("download"),
-                    resultSet.getObject("upload") == null ? null : resultSet.getDouble("upload"),
+            return new ServerReport(UUID.fromString(resultSet.getString("id")), resultSet.getObject("download") == null ? null : resultSet.getDouble("download")/1000000,
+                    resultSet.getObject("upload") == null ? null : resultSet.getDouble("upload")/1000000,
                     resultSet.getObject("ping") == null ? null : resultSet.getDouble("ping"), resultSet.getTimestamp("recorded_at"),
                     UUID.fromString(resultSet.getString("report_record_id")));
         }));
@@ -51,8 +51,8 @@ public class ServerReportDataAccessService implements ServerReportDao {
     public List<ServerReport> selectAllServerReports() {
         String sql = "SELECT id, download, upload, ping, recorded_at, report_record_id FROM server_report ORDER BY recorded_at;";
         List<ServerReport> serverReports = jdbcTemplate.query(sql, ((resultSet, i) -> {
-            return new ServerReport(UUID.fromString(resultSet.getString("id")), resultSet.getDouble("download"),
-                    resultSet.getDouble("upload"), resultSet.getDouble("ping"), resultSet.getTimestamp("recorded_at"),
+            return new ServerReport(UUID.fromString(resultSet.getString("id")), resultSet.getDouble("download")/1000000,
+                    resultSet.getDouble("upload")/1000000, resultSet.getDouble("ping"), resultSet.getTimestamp("recorded_at"),
                     UUID.fromString(resultSet.getString("report_record_id")));
         }));
         serverReports.sort((a, b) -> b.getTimestamp().compareTo(a.getTimestamp()));
@@ -89,8 +89,8 @@ public class ServerReportDataAccessService implements ServerReportDao {
     public Optional<ServerReport> selectServerReportById(UUID id) {
         final String sql = "SELECT * FROM server_report WHERE id = ? ORDER BY recorded_at;";
         ServerReport report = jdbcTemplate.queryForObject(sql, new Object[] { id }, ((resultSet, i) -> {
-            return new ServerReport(UUID.fromString(resultSet.getString("id")), resultSet.getObject("upload") == null ? null : resultSet.getDouble("upload"),
-                    resultSet.getObject("download") == null ? null : resultSet.getDouble("download"),
+            return new ServerReport(UUID.fromString(resultSet.getString("id")), resultSet.getObject("upload") == null ? null : resultSet.getDouble("upload")/1000000,
+                    resultSet.getObject("download") == null ? null : resultSet.getDouble("download")/1000000,
                     resultSet.getObject("ping") == null ? null : resultSet.getDouble("ping"),
                     resultSet.getTimestamp("recorded_at"),
                     UUID.fromString(resultSet.getString("report_record_id")));
@@ -111,11 +111,14 @@ public class ServerReportDataAccessService implements ServerReportDao {
         ArrayList<Object[]> downloads = new ArrayList<>();
         ArrayList<Object[]> uploads = new ArrayList<>();
          jdbcTemplate.query(sql, new Object[] { startDate, endDate, reportRecordId }, ((resultSet) -> {
-             Object[] arr = new Object[]{resultSet.getTimestamp("recorded_at").getTime(), resultSet.getObject("ping") == null ? null : resultSet.getDouble("ping")};
+             Object[] arr = new Object[]{resultSet.getTimestamp("recorded_at").getTime(),
+                     resultSet.getObject("ping") == null ? null : round(resultSet.getDouble("ping"), 2)};
              pings.add(arr);
-             arr = new Object[]{resultSet.getTimestamp("recorded_at").getTime(), resultSet.getObject("download") == null ? null : resultSet.getDouble("download")};
+             arr = new Object[]{resultSet.getTimestamp("recorded_at").getTime(),
+                     resultSet.getObject("download") == null ? null : round(resultSet.getDouble("download")/1000000, 4)};
              downloads.add(arr);
-             arr = new Object[]{resultSet.getTimestamp("recorded_at").getTime(), resultSet.getObject("upload") == null ? null : resultSet.getDouble("upload")};
+             arr = new Object[]{resultSet.getTimestamp("recorded_at").getTime(),
+                     resultSet.getObject("upload") == null ? null : round(resultSet.getDouble("upload")/1000000, 4)};
              uploads.add(arr);
         }));
 
@@ -124,5 +127,11 @@ public class ServerReportDataAccessService implements ServerReportDao {
         result.add(downloads);
         result.add(uploads);
         return result;
+    }
+
+    public Double round(Double num, int places)
+    {
+        num = (double) Math.round(num * Math.pow(10, places));
+        return num / Math.pow(10, places);
     }
 }

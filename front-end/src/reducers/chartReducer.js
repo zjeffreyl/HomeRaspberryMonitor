@@ -1,7 +1,9 @@
 import { FETCH_DATA_FROM_START_END, SET_CHART_TO_DOWNLOAD, SET_CHART_TO_PING, SET_CHART_TO_UPLOAD } from "../actions/types";
 
+
 const d = new Date();
 const n = d.getTimezoneOffset();
+
 const initialState = {
   options: {
     title: {
@@ -14,6 +16,16 @@ const initialState = {
       type: 'datetime',
       labels: {
         overflow: 'justify'
+      }
+    },
+    plotOptions: {
+      solidgauge: {
+        dataLabels: {
+          enabled: true
+        },
+        linecap: "round",
+        stickyTracking: false,
+        rounded: false
       }
     },
     time: {
@@ -35,12 +47,14 @@ export default function (state = initialState, action) {
       return {
         ...state,
         options: {
+          ...state.options,
           title: {
             text: "Ping"
           },
-          ...state.options.xAxis,
-          time: {
-            timezoneOffset: n
+          yAxis: {
+            labels: {
+              format: '{value} ms'
+            },
           },
           series: action.payload
         }
@@ -50,12 +64,14 @@ export default function (state = initialState, action) {
       return {
         ...state,
         options: {
+          ...state.options,
           title: {
             text: "Download"
           },
-          ...state.options.xAxis,
-          time: {
-            timezoneOffset: n
+          yAxis: {
+            labels: {
+              format: '{value} Mbps'
+            },
           },
           series: action.payload
         }
@@ -66,11 +82,15 @@ export default function (state = initialState, action) {
       return {
         ...state,
         options: {
+          ...state.options,
           title: {
             text: "Upload"
           },
-          ...state.options.xAxis,
-          ...state.options.time,
+          yAxis: {
+            labels: {
+              format: '{value} Mbps'
+            }
+          },
           series: action.payload
         }
       }

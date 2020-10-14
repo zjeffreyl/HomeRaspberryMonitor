@@ -7,9 +7,10 @@ import { LocalDateToUTC } from "../utilities/conversions";
 import PropTypes from "prop-types";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
+import solidGauge from "highcharts/modules/solid-gauge.js";
 
 const measurements = ["Ping", "Download", "Upload"];
-
+solidGauge(Highcharts);
 class DataChart extends Component {
 
   state = {
@@ -42,7 +43,6 @@ class DataChart extends Component {
   };
 
   componentDidMount() {
-
     var current = LocalDateToUTC(new Date());
     var tsYesterday = LocalDateToUTC(new Date(Date.now() - 86400 * 1000));
     this.props.setChartToPing(tsYesterday, current);
