@@ -6,7 +6,6 @@ import routes from "./routes";
 import { Route, Switch, BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
-import RecordsView from "./views/RecordsView";
 
 function App(props) {
   return (

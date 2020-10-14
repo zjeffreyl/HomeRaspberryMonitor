@@ -39,10 +39,6 @@ class AddRecordCard extends Component {
     records: PropTypes.array.isRequired,
   };
 
-  constructor() {
-    super();
-  }
-
   recordsNameExists(record_name) {
     if (record_name.trim().length === 0) {
       return false;
@@ -64,8 +60,6 @@ class AddRecordCard extends Component {
       record_name,
       server_id,
       interval,
-      start_time,
-      end_time,
       start_hour,
       end_hour,
     } = this.state;
@@ -76,9 +70,8 @@ class AddRecordCard extends Component {
         visible: true,
         message: "Record name already exists",
       });
-    } 
-    else if (record_name === null || record_name.match(/^ *$/) !== null)
-    {
+    }
+    else if (record_name === null || record_name.match(/^ *$/) !== null) {
       this.setState({
         visible: true,
         message: "Record name is empty"
@@ -158,9 +151,8 @@ class AddRecordCard extends Component {
     let hours = newDate.getUTCHours();
     let minutes = newDate.getUTCMinutes();
     let dash = "-";
-    return `${year}${dash}${
-      month < 10 ? `0${month}` : `${month}`
-    }${dash}${date} ${hours}:${minutes}`;
+    return `${year}${dash}${month < 10 ? `0${month}` : `${month}`
+      }${dash}${date} ${hours}:${minutes}`;
   }
   render() {
     const {

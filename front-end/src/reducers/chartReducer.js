@@ -1,8 +1,7 @@
 import { FETCH_DATA_FROM_START_END, SET_CHART_TO_DOWNLOAD, SET_CHART_TO_PING, SET_CHART_TO_UPLOAD } from "../actions/types";
 
-const d = new Date()
+const d = new Date();
 const n = d.getTimezoneOffset();
-
 const initialState = {
   options: {
     title: {
@@ -22,6 +21,7 @@ const initialState = {
     },
     series: []
   },
+  currentData: [],
   ping: [],
   download: [],
   upload: [],
@@ -36,45 +36,29 @@ export default function (state = initialState, action) {
         ...state,
         options: {
           title: {
-            text: state.dataType
+            text: "Ping"
           },
-          xAxis: {
-            dateTimeLabelFormats: {
-              hour: '%l %p',
-            },
-            type: 'datetime',
-            labels: {
-              overflow: 'justify'
-            }
-          },
+          ...state.options.xAxis,
           time: {
             timezoneOffset: n
           },
-          series: state.ping
-        },
-      }
+          series: action.payload
+        }
+      };
     case SET_CHART_TO_DOWNLOAD:
       console.log(state.download);
       return {
         ...state,
         options: {
           title: {
-            text: state.dataType
+            text: "Download"
           },
-          xAxis: {
-            dateTimeLabelFormats: {
-              hour: '%l %p',
-            },
-            type: 'datetime',
-            labels: {
-              overflow: 'justify'
-            }
-          },
+          ...state.options.xAxis,
           time: {
             timezoneOffset: n
           },
-          series: state.download
-        },
+          series: action.payload
+        }
 
       }
     case SET_CHART_TO_UPLOAD:
@@ -83,23 +67,12 @@ export default function (state = initialState, action) {
         ...state,
         options: {
           title: {
-            text: state.dataType
+            text: "Upload"
           },
-          xAxis: {
-            dateTimeLabelFormats: {
-              hour: '%l %p',
-            },
-            type: 'datetime',
-            labels: {
-              overflow: 'justify'
-            }
-          },
-          time: {
-            timezoneOffset: n
-          },
-          series: state.upload
-        },
-
+          ...state.options.xAxis,
+          ...state.options.time,
+          series: action.payload
+        }
       }
     case FETCH_DATA_FROM_START_END:
       return {

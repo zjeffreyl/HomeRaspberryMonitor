@@ -12,7 +12,6 @@ import { deleteServerReports } from "../actions/serverReportActions";
 import { fetchRecords, deleteRecord } from "../actions/recordActions";
 import { connect } from "react-redux";
 import {
-  LocalTimeToUTC,
   minutesToString,
   UTCDefaultToLocalTimeZone,
   UTCTimeToLocal,

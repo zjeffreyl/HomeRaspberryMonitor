@@ -33,7 +33,7 @@ export const UTCDefaultToLocalTimeZone = (time) => {
   var minutes = newDate.getMinutes();
   hours = hours <= 9 ? "0" + hours : hours;
   minutes = minutes <= 9 ? "0" + minutes : minutes;
-  var time = hours + ":" + minutes;
+  time = hours + ":" + minutes;
   const options = {
     weekday: "long",
     year: "numeric",
@@ -68,16 +68,12 @@ export const militaryToAmPm = (militaryTime) => {
   var hour = militaryTime.split(":")[0];
   var minutes = militaryTime.split(":")[1];
   var suffix = hour >= 12 ? "PM" : "AM";
-  if(hour > 0 && hour <= 12)
-  {
-    hour = hour;
+  if (hour > 0 && hour <= 12) {
   }
-  else if(hour - 12)
-  {
+  else if (hour - 12) {
     hour -= 12;
   }
-  else if(hour == 0)
-  {
+  else if (hour === 0) {
     hour = 12;
   }
   return hour + ":" + minutes + " " + suffix;

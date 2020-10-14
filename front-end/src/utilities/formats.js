@@ -4,7 +4,6 @@ export const bitsToPs = (bits) => {
   }
   var mbps = bits / 1000000;
   var kbps = bits / 1000;
-  const sizes = ["Mbps", "Kbps"];
   return mbps >= 1.0 ? mbps.toFixed(2) + " Mbps" : kbps.toFixed(2) + " Kbps";
 };
 
