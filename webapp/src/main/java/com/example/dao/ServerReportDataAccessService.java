@@ -50,11 +50,9 @@ public class ServerReportDataAccessService implements ServerReportDao {
     @Override
     public List<ServerReport> selectAllServerReports() {
         String sql = "SELECT id, download, upload, ping, recorded_at, report_record_id FROM server_report ORDER BY recorded_at;";
-        List<ServerReport> serverReports = jdbcTemplate.query(sql, ((resultSet, i) -> {
-            return new ServerReport(UUID.fromString(resultSet.getString("id")), resultSet.getDouble("download")/1000000,
-                    resultSet.getDouble("upload")/1000000, resultSet.getDouble("ping"), resultSet.getTimestamp("recorded_at"),
-                    UUID.fromString(resultSet.getString("report_record_id")));
-        }));
+        List<ServerReport> serverReports = jdbcTemplate.query(sql, ((resultSet, i) -> new ServerReport(UUID.fromString(resultSet.getString("id")), resultSet.getDouble("download")/1000000,
+                resultSet.getDouble("upload")/1000000, resultSet.getDouble("ping"), resultSet.getTimestamp("recorded_at"),
+                UUID.fromString(resultSet.getString("report_record_id")))));
         serverReports.sort((a, b) -> b.getTimestamp().compareTo(a.getTimestamp()));
         return serverReports;
     }
@@ -127,6 +125,39 @@ public class ServerReportDataAccessService implements ServerReportDao {
         result.add(downloads);
         result.add(uploads);
         return result;
+    }
+
+    @Override
+    public Double averagePing(Timestamp startDate, Timestamp endDate) {
+        final String sql = "SELECT AVG(avg) FROM (SELECT AVG(ping), report_record_id FROM server_report WHERE recorded_at >= ? AND recorded_at <= ? GROUP BY (report_record_id)) AS record_averages";
+        Double val = jdbcTemplate.queryForObject(sql, new Object[]{startDate, endDate}, Double.class);
+        if(val != null)
+        {
+            val = round(val, 2);
+        }
+        return val;
+    }
+
+    @Override
+    public Double averageDownload(Timestamp startDate, Timestamp endDate) {
+        final String sql = "SELECT AVG(avg) FROM (SELECT AVG(download), report_record_id FROM server_report WHERE recorded_at >= ? AND recorded_at <= ? GROUP BY (report_record_id)) AS record_averages";
+        Double val = jdbcTemplate.queryForObject(sql, new Object[]{startDate, endDate}, Double.class);
+        if(val != null)
+        {
+            val = round(val/1000000, 4);
+        }
+        return val;
+    }
+
+    @Override
+    public Double averageUpload(Timestamp startDate, Timestamp endDate) {
+        final String sql = "SELECT AVG(avg) FROM (SELECT AVG(upload), report_record_id FROM server_report WHERE recorded_at >= ? AND recorded_at <= ? GROUP BY (report_record_id)) AS record_averages";
+        Double val = jdbcTemplate.queryForObject(sql, new Object[]{startDate, endDate}, Double.class);
+        if(val != null)
+        {
+            val = round(val/1000000, 4);
+        }
+        return val;
     }
 
     public Double round(Double num, int places)

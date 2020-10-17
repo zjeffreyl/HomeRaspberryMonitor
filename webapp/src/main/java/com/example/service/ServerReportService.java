@@ -56,4 +56,19 @@ public class ServerReportService {
     public List<List<Object[]>> getPerformanceDataInTimestampRangeByRecordId(Timestamp startDate, Timestamp endDate, UUID reportRecordId) {
         return serverReportDao.getPerformanceDataByDate(startDate, endDate, reportRecordId);
     }
+
+    public Double getAveragePingFromStartToEnd(Timestamp startDate, Timestamp endDate)
+    {
+        return serverReportDao.averagePing(startDate, endDate);
+    }
+
+    public Double getAverageDownloadFromStartToEnd(Timestamp startDate, Timestamp endDate)
+    {
+        return serverReportDao.averageDownload(startDate, endDate);
+    }
+
+    public Double getAverageUploadFromStartToEnd(Timestamp startDate, Timestamp endDate)
+    {
+        return serverReportDao.averageUpload(startDate, endDate);
+    }
 }

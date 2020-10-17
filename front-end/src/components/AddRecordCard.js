@@ -64,7 +64,6 @@ class AddRecordCard extends Component {
       end_hour,
     } = this.state;
 
-    console.log("Current Time: " + start_hour + " - " + end_hour);
     if (this.recordsNameExists(record_name)) {
       this.setState({
         visible: true,

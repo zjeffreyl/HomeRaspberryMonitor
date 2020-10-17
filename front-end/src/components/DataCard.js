@@ -6,11 +6,11 @@ import {
   Row,
   Col,
   CardTitle,
-  Nav,
   NavItem,
   TabPane,
   TabContent,
   NavLink,
+  Nav
 } from "reactstrap";
 import classnames from "classnames";
 import { formatDate } from "../utilities/formats";
@@ -47,46 +47,14 @@ export default function DataCard(props) {
       </Nav>
       <TabContent activeTab={activeTab}>
         <TabPane tabId="1">
-          <CardContent
-            type={props.type}
-            value={props.recentData}
-            footer={"Last updated: " + formatDate(props.latestReportTimestamp)}
-          />
+
         </TabPane>
         <TabPane tabId="2">
-          <CardContent
-            type={props.type}
-            value={props.historyData}
-            footer="Since first report"
-          />
+
         </TabPane>
       </TabContent>
     </div>
   );
 }
 
-const CardContent = (props) => (
-  <Card>
-    <CardBody>
-      <Row>
-        <Col>
-          <div>
-            <i src="" />
-          </div>
-        </Col>
-        <Col>
-          <div>
-            <p>{props.type.charAt(0).toUpperCase() + props.type.slice(1)}</p>
-            <CardTitle>{props.value}</CardTitle>
-          </div>
-        </Col>
-      </Row>
-    </CardBody>
-    <CardFooter>
-      <div>
-        <i />
-        {props.footer}
-      </div>
-    </CardFooter>
-  </Card>
-);
+

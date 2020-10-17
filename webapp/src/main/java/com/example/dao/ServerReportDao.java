@@ -28,4 +28,10 @@ public interface ServerReportDao {
     Timestamp mostRecentServerReportTimestamp();
 
     List<List<Object[]>> getPerformanceDataByDate(Timestamp startDate, Timestamp endDate, UUID reportRecordId);
+
+    Double averagePing(Timestamp startDate, Timestamp endDate);
+
+    Double averageDownload(Timestamp startDate, Timestamp endDate);
+
+    Double averageUpload(Timestamp startDate, Timestamp endDate);
 }

@@ -10,24 +10,13 @@ import {
 } from "reactstrap";
 import classnames from "classnames";
 import DashboardContent from "../components/DashboardContent";
-import Highcharts from "highcharts";
-import HighchartsReact from "highcharts-react-official";
 
-export default function DashboardView() {
+export default function DashboardView(props) {
   const [activeTab, setActiveTab] = useState("1");
 
   const toggle = (tab) => {
     if (activeTab !== tab) setActiveTab(tab);
   };
-
-  const options = {
-    title: {
-      text: 'My chart'
-    },
-    series: [{
-      data: [{ "name": [1, 2, 3] }, [2, 3, 4]]
-    }]
-  }
 
   return (
     <div>
@@ -49,7 +38,7 @@ export default function DashboardView() {
               toggle("2");
             }}
           >
-            1 week
+            5 days
           </NavLink>
         </NavItem>
         <NavItem>
@@ -59,32 +48,29 @@ export default function DashboardView() {
               toggle("3");
             }}
           >
-            1 month
+            2 weeks
           </NavLink>
         </NavItem>
       </Nav>
       <TabContent activeTab={activeTab}>
         <TabPane tabId="1">
           <Row>
-            <Col sm="12">
-              <DashboardContent />
+            <Col>
+              <DashboardContent id={1} />
             </Col>
           </Row>
         </TabPane>
         <TabPane tabId="2">
           <Row>
             <Col>
-              <HighchartsReact
-                highcharts={Highcharts}
-                options={options}
-              />
+              <DashboardContent id={2} />
             </Col>
           </Row>
         </TabPane>
         <TabPane tabId="3">
           <Row>
             <Col>
-              <h2>Tab 3 Contents</h2>
+              <DashboardContent id={3} />
             </Col>
           </Row>
         </TabPane>
@@ -92,38 +78,3 @@ export default function DashboardView() {
     </div>
   );
 }
-
-// class DashboardView extends Component {
-//   render() {
-//     return (
-//       <div>
-
-//         <DashboardCards />
-//         <Row>
-//           <Col>
-//             <Card>
-//               <CardHeader>
-//                 <CardTitle>Record Averages from the last N times</CardTitle>
-//                 <Row>
-//                   <Col>
-//                     <p>Last 24 hours</p>
-//                   </Col>
-//                 </Row>
-//                 <CardBody>
-//                   <Line
-//                     data={dashboard24HoursPerformanceChart.data}
-//                     options={dashboard24HoursPerformanceChart.options}
-//                     width={400}
-//                     height={100}
-//                   />
-//                 </CardBody>
-//               </CardHeader>
-//             </Card>
-//           </Col>
-//         </Row>
-//       </div>
-//     );
-//   }
-// }
-
-// export default DashboardView;

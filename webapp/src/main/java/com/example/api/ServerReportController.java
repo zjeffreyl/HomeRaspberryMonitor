@@ -97,38 +97,36 @@ public class ServerReportController {
                 return result;
         }
 
-        @GetMapping(path = "historyData")
+        @GetMapping(path = "historyData/startDate={startDate}endDate={endDate}")
         @CrossOrigin(origins = "http://localhost:3000")
-        public double[] getHistoryData() {
-                double[] result = new double[3];
-                List<ReportRecord> records = reportRecordService.getAllReportRecords();
-                Arrays.fill(result, -1);
-                if(records.size() == 0) return result;
-                double sum_ping = 0;
-                double sum_download = 0;
-                double sum_upload = 0;
-                int nonEmptyRecords = 0;
-                for (ReportRecord record : records) {
-                        double record_average_ping = 0;
-                        double record_average_download = 0;
-                        double record_average_upload = 0;
+        public Double[] getHistoryData(@PathVariable("startDate") Timestamp startDate,
+                                       @PathVariable("endDate") Timestamp endDate) {
+                return new Double[]{
+                        serverReportService.getAveragePingFromStartToEnd(startDate, endDate),
+                        serverReportService.getAverageDownloadFromStartToEnd(startDate, endDate),
+                        serverReportService.getAverageUploadFromStartToEnd(startDate, endDate)
+                };
+        }
 
-                        List<ServerReport> serverReports = serverReportService
-                                        .getAllServerReportsByRecordId(record.getId());
-                        for (ServerReport report : serverReports) {
-                                if(report.getPing() == null) continue;
-                                record_average_ping += report.getPing();
-                                record_average_download += report.getDownload();
-                                record_average_upload += report.getUpload();
-                        }
-                        sum_ping += record_average_ping /= serverReports.size();
-                        sum_download += record_average_download /= serverReports.size();
-                        sum_upload += record_average_upload /= serverReports.size();
-                }
-                result[0] = sum_ping / records.size();
-                result[1] = sum_download / records.size();
-                result[2] = sum_upload / records.size();
-                return result;
+        @GetMapping(path = "historyData/ping/startDate={startDate}endDate={endDate}")
+        @CrossOrigin(origins = "http://localhost:3000")
+        public Double getHistoryDataPing(@PathVariable("startDate") Timestamp startDate, @PathVariable("endDate") Timestamp endDate)
+        {
+                return serverReportService.getAveragePingFromStartToEnd(startDate, endDate);
+        }
+
+        @GetMapping(path = "historyData/download/startDate={startDate}endDate={endDate}")
+        @CrossOrigin(origins = "http://localhost:3000")
+        public Double getHistoryDataDownload(@PathVariable("startDate") Timestamp startDate, @PathVariable("endDate") Timestamp endDate)
+        {
+                return serverReportService.getAverageDownloadFromStartToEnd(startDate, endDate);
+        }
+
+        @GetMapping(path = "historyData/upload/startDate={startDate}endDate={endDate}")
+        @CrossOrigin(origins = "http://localhost:3000")
+        public Double getHistoryDataUpload(@PathVariable("startDate") Timestamp startDate, @PathVariable("endDate") Timestamp endDate)
+        {
+                return serverReportService.getAverageUploadFromStartToEnd(startDate, endDate);
         }
 
         @GetMapping(path = "lastRecordedDate")

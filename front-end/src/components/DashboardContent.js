@@ -4,17 +4,18 @@ import DashboardCards from "./DashboardCards";
 import DataChart from "./DataChart";
 
 export default class DashboardContent extends Component {
+
   render() {
     return (
       <div>
         <Row>
           <Col>
-            <DashboardCards />
+            <DashboardCards {...this.props} />
           </Col>
         </Row>
         <Row>
           <Col>
-            <DataChart />
+            <DataChart {...this.props} />
           </Col>
         </Row>
       </div>

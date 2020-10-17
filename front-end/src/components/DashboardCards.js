@@ -1,77 +1,74 @@
 import React, { Component } from "react";
-import DataCard from "../components/DataCard";
-import { Row } from "reactstrap";
+import { Row, Card, CardBody, Col, CardTitle } from "reactstrap";
 import PropTypes from "prop-types";
-import { fetchRecords } from "../actions/recordActions";
 import {
-  fetchServerReports,
-  fetchRecentData,
-  fetchHistoryData,
-  fetchLatestReportTimestamp,
+  fetchAveragePing,
+  fetchAverageDownload,
+  fetchAverageUpload
 } from "../actions/serverReportActions";
 import { connect } from "react-redux";
-import { bitsToPs, roundByN } from "../utilities/formats";
 
 class DashboardCards extends Component {
   static propTypes = {
-    records: PropTypes.array.isRequired,
-    fetchRecords: PropTypes.func.isRequired,
-    serverReports: PropTypes.array.isRequired,
-    fetchServerReports: PropTypes.func.isRequired,
-    fetchRecentData: PropTypes.func.isRequired,
-    recentData: PropTypes.array.isRequired,
-    fetchHistoryData: PropTypes.func.isRequired,
-    historyData: PropTypes.array.isRequired,
-    fetchLatestReportTimestamp: PropTypes.func.isRequired,
+    fetchAveragePing: PropTypes.func.isRequired,
+    fetchAverageDownload: PropTypes.func.isRequired,
+    fetchAverageUpload: PropTypes.func.isRequired,
   };
 
   componentDidMount() {
-    this.props.fetchRecords();
-    this.props.fetchServerReports();
-    this.props.fetchRecentData();
-    this.props.fetchHistoryData();
-    this.props.fetchLatestReportTimestamp();
+    this.props.fetchAveragePing(this.props.id);
+    this.props.fetchAverageDownload(this.props.id);
+    this.props.fetchAverageUpload(this.props.id);
   }
 
   render() {
-    const noData = "No Data Yet";
     return (
       <Row>
-        <DataCard
+        <CardContent
           type="ping"
-          recentData={this.props.recentData[0] === -1 ? noData : roundByN(this.props.recentData[0], 0)}
-          historyData={this.props.historyData[0] === -1 ? noData : roundByN(this.props.historyData[0], 0)}
-          latestReportTimestamp={this.props.latestReportTimestamp}
+          value={this.props.ping}
         />
-        <DataCard
+        <CardContent
           type="download"
-          recentData={this.props.recentData[1] === -1 ? noData : bitsToPs(this.props.recentData[1])}
-          historyData={this.props.historyData[1] === -1 ? noData : bitsToPs(this.props.historyData[1])}
-          latestReportTimestamp={this.props.recentData[1] === -1 ? noData : this.props.latestReportTimestamp}
+          value={this.props.download}
         />
-        <DataCard
+        <CardContent
           type="upload"
-          recentData={this.props.recentData[2] === - 1 ? noData : bitsToPs(this.props.recentData[2])}
-          historyData={this.props.historyData[2] === -1 ? noData: bitsToPs(this.props.historyData[2])}
-          latestReportTimestamp={this.props.latestReportTimestamp}
+          value={this.props.upload}
         />
       </Row>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
-  records: state.records.records,
-  serverReports: state.serverReports.serverReports,
-  recentData: state.serverReports.recentData,
-  historyData: state.serverReports.historyData,
-  latestReportTimestamp: state.serverReports.latestReportTimestamp,
+const mapStateToProps = (state, props) => ({
+  ping: state.serverReports.historyData[props.id].ping,
+  download: state.serverReports.historyData[props.id].download,
+  upload: state.serverReports.historyData[props.id].upload
 });
 
+const CardContent = (props) => (
+  <Card>
+    <CardBody>
+      <Row>
+        <Col>
+          <div>
+            <i src="" />
+          </div>
+        </Col>
+        <Col>
+          <div>
+            <p>{props.type.charAt(0).toUpperCase() + props.type.slice(1)}</p>
+            <CardTitle>{props.value === null ? "No Data" : props.type === "ping" ? props.value + " ms" : props.value + " Mbps"}</CardTitle>
+          </div>
+        </Col>
+      </Row>
+    </CardBody>
+  </Card>
+);
+
+
+
 export default connect(mapStateToProps, {
-  fetchRecords,
-  fetchServerReports,
-  fetchRecentData,
-  fetchHistoryData,
-  fetchLatestReportTimestamp,
+  fetchAveragePing, fetchAverageDownload, fetchAverageUpload
 })(DashboardCards);

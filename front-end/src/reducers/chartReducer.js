@@ -1,37 +1,86 @@
-import { FETCH_DATA_FROM_START_END, SET_CHART_TO_DOWNLOAD, SET_CHART_TO_PING, SET_CHART_TO_UPLOAD } from "../actions/types";
+import { FETCH_DATA_FROM_START_END, SET_CHART1_TO_PING, SET_CHART1_TO_DOWNLOAD, SET_CHART1_TO_UPLOAD, SET_CHART2_TO_PING, SET_CHART2_TO_DOWNLOAD, SET_CHART2_TO_UPLOAD, SET_CHART3_TO_PING, SET_CHART3_TO_DOWNLOAD, SET_CHART3_TO_UPLOAD } from "../actions/types";
 
 
 const d = new Date();
 const n = d.getTimezoneOffset();
 
 const initialState = {
-  options: {
-    title: {
-      text: ""
-    },
-    xAxis: {
-      dateTimeLabelFormats: {
-        hour: '%l %p',
+  chartTabsById: {
+    1: {
+      title: {
+        text: ""
       },
-      type: 'datetime',
-      labels: {
-        overflow: 'justify'
-      }
-    },
-    plotOptions: {
-      solidgauge: {
-        dataLabels: {
-          enabled: true
+      xAxis: {
+        dateTimeLabelFormats: {
+          hour: '%l %p',
         },
-        linecap: "round",
-        stickyTracking: false,
-        rounded: false
-      }
+        type: 'datetime',
+        labels: {
+          overflow: 'justify'
+        }
+      },
+      plotOptions: {
+        series: {
+          marker: {
+            enabled: false
+          }
+        }
+      },
+      time: {
+        timezoneOffset: n
+      },
+      series: []
     },
-    time: {
-      timezoneOffset: n
+    2: {
+      title: {
+        text: ""
+      },
+      xAxis: {
+        dateTimeLabelFormats: {
+          hour: '%l %p',
+        },
+        type: 'datetime',
+        labels: {
+          overflow: 'justify'
+        }
+      },
+      plotOptions: {
+        series: {
+          marker: {
+            enabled: false
+          }
+        }
+      },
+      time: {
+        timezoneOffset: n
+      },
+      series: []
     },
-    series: []
+    3: {
+      title: {
+        text: ""
+      },
+      xAxis: {
+        dateTimeLabelFormats: {
+          hour: '%l %p',
+        },
+        type: 'datetime',
+        labels: {
+          overflow: 'justify'
+        }
+      },
+      plotOptions: {
+        series: {
+          marker: {
+            enabled: false
+          }
+        }
+      },
+      time: {
+        timezoneOffset: n
+      },
+      series: []
+    }
   },
   currentData: [],
   ping: [],
@@ -42,56 +91,179 @@ const initialState = {
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case SET_CHART_TO_PING:
-      console.log(state.ping);
+    case SET_CHART1_TO_PING:
       return {
         ...state,
-        options: {
-          ...state.options,
-          title: {
-            text: "Ping"
-          },
-          yAxis: {
-            labels: {
-              format: '{value} ms'
+        chartTabsById: {
+          ...state.chartTabsById,
+          1: {
+            ...state.chartTabsById[1],
+            title: {
+              text: "Ping"
             },
-          },
-          series: action.payload
+            yAxis: {
+              labels: {
+                format: '{value} ms'
+              },
+            },
+            series: action.payload
+          }
         }
       };
-    case SET_CHART_TO_DOWNLOAD:
-      console.log(state.download);
+    case SET_CHART1_TO_DOWNLOAD:
       return {
         ...state,
-        options: {
-          ...state.options,
-          title: {
-            text: "Download"
-          },
-          yAxis: {
-            labels: {
-              format: '{value} Mbps'
+        chartTabsById: {
+          ...state.chartTabsById,
+          1: {
+            ...state.chartTabsById[1],
+            title: {
+              text: "Download"
             },
-          },
-          series: action.payload
+            yAxis: {
+              labels: {
+                format: '{value} Mbps'
+              },
+            },
+            series: action.payload
+          }
+
         }
 
       }
-    case SET_CHART_TO_UPLOAD:
-      console.log(state.upload);
+    case SET_CHART1_TO_UPLOAD:
       return {
         ...state,
-        options: {
-          ...state.options,
-          title: {
-            text: "Upload"
-          },
-          yAxis: {
-            labels: {
-              format: '{value} Mbps'
-            }
-          },
-          series: action.payload
+        chartTabsById: {
+          ...state.chartTabsById,
+          2: {
+            ...state.chartTabsById[2],
+            title: {
+              text: "Upload"
+            },
+            yAxis: {
+              labels: {
+                format: '{value} Mbps'
+              }
+            },
+            series: action.payload
+          }
+        }
+      }
+    case SET_CHART2_TO_PING:
+      return {
+        ...state,
+        chartTabsById: {
+          ...state.chartTabsById,
+          2: {
+            ...state.chartTabsById[2],
+            title: {
+              text: "Ping"
+            },
+            yAxis: {
+              labels: {
+                format: '{value} ms'
+              },
+            },
+            series: action.payload
+          }
+
+        }
+      };
+    case SET_CHART2_TO_DOWNLOAD:
+      return {
+        ...state,
+        chartTabsById: {
+          ...state.chartTabsById,
+          2: {
+            ...state.chartTabsById[2],
+            title: {
+              text: "Download"
+            },
+            yAxis: {
+              labels: {
+                format: '{value} Mbps'
+              },
+            },
+            series: action.payload
+          }
+        }
+
+      }
+    case SET_CHART2_TO_UPLOAD:
+      return {
+        ...state,
+        chartTabsById: {
+          ...state.chartTabsById,
+          2: {
+            ...state.chartTabsById[2],
+            title: {
+              text: "Upload"
+            },
+            yAxis: {
+              labels: {
+                format: '{value} Mbps'
+              },
+            },
+            series: action.payload
+          }
+        }
+      }
+    case SET_CHART3_TO_PING:
+      return {
+        ...state,
+        chartTabsById: {
+          ...state.chartTabsById,
+          3: {
+            ...state.chartTabsById[3],
+            title: {
+              text: "Ping"
+            },
+            yAxis: {
+              labels: {
+                format: '{value} ms'
+              },
+            },
+            series: action.payload
+          }
+        }
+      };
+    case SET_CHART3_TO_DOWNLOAD:
+      return {
+        ...state,
+        chartTabsById: {
+          ...state.chartTabsById,
+          3: {
+            ...state.chartTabsById[3],
+            title: {
+              text: "Download"
+            },
+            yAxis: {
+              labels: {
+                format: '{value} Mbps'
+              },
+            },
+            series: action.payload
+          }
+        }
+      }
+    case SET_CHART3_TO_UPLOAD:
+      return {
+        ...state,
+        chartTabsById: {
+          ...state.chartTabsById,
+          3: {
+            ...state.chartTabsById[3],
+            title: {
+              text: "Download"
+            },
+            yAxis: {
+              labels: {
+                format: '{value} Mbps'
+              },
+            },
+            series: action.payload
+          }
         }
       }
     case FETCH_DATA_FROM_START_END:

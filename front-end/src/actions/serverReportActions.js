@@ -2,10 +2,20 @@ import {
   FETCH_SERVER_REPORTS,
   DELETE_SERVER_REPORTS,
   FETCH_RECENT_DATA,
-  FETCH_HISTORY_DATA,
   FETCH_LATEST_REPORT_TIMESTAMP,
+  FETCH_AVERAGE_PING_1,
+  FETCH_AVERAGE_PING_2,
+  FETCH_AVERAGE_PING_3,
+  FETCH_AVERAGE_DOWNLOAD_1,
+  FETCH_AVERAGE_DOWNLOAD_2,
+  FETCH_AVERAGE_DOWNLOAD_3,
+  FETCH_AVERAGE_UPLOAD_1,
+  FETCH_AVERAGE_UPLOAD_2,
+  FETCH_AVERAGE_UPLOAD_3
 } from "./types";
 import axios from "axios";
+import { LocalDateToUTC } from "../utilities/conversions";
+import { tabIdToDays } from "../utilities/constants";
 
 export const fetchServerReports = () => (dispatch) => {
   axios
@@ -44,14 +54,116 @@ export const fetchRecentData = () => (dispatch) => {
     .catch((err) => console.log(err));
 };
 
-export const fetchHistoryData = () => (dispatch) => {
+export const fetchAveragePing = (id) => (dispatch) => {
+  var days = tabIdToDays(id);
+  var endDate = LocalDateToUTC(new Date());
+  var startDate = LocalDateToUTC(new Date(Date.now() - 86400 * days * 1000));
+  startDate = startDate.replace("T", " ");
+  startDate = startDate.split(".")[0];
+  endDate = endDate.replace("T", " ");
+  endDate = endDate.split(".")[0];
   axios
-    .get(`http://localhost:8080/api/serverReport/historyData`)
+    .get(`http://localhost:8080/api/serverReport/historyData/ping/startDate=${startDate}endDate=${endDate}`)
     .then((res) => {
-      dispatch({
-        type: FETCH_HISTORY_DATA,
-        payload: res.data,
-      });
+      switch (id) {
+        case 1:
+          dispatch({
+            type: FETCH_AVERAGE_PING_1,
+            payload: res.data
+          });
+          break;
+        case 2:
+          dispatch({
+            type: FETCH_AVERAGE_PING_2,
+            payload: res.data
+          });
+          break;
+        case 3:
+          dispatch({
+            type: FETCH_AVERAGE_PING_3,
+            payload: res.data
+          });
+          break;
+        default:
+          console.error("Fetch Ping Id not found");
+          break;
+      }
+    })
+    .catch((err) => console.log(err));
+};
+
+export const fetchAverageDownload = (id) => (dispatch) => {
+  var days = tabIdToDays(id);
+  var endDate = LocalDateToUTC(new Date());
+  var startDate = LocalDateToUTC(new Date(Date.now() - 86400 * days * 1000));
+  startDate = startDate.replace("T", " ");
+  startDate = startDate.split(".")[0];
+  endDate = endDate.replace("T", " ");
+  endDate = endDate.split(".")[0];
+  axios
+    .get(`http://localhost:8080/api/serverReport/historyData/download/startDate=${startDate}endDate=${endDate}`)
+    .then((res) => {
+      switch (id) {
+        case 1:
+          dispatch({
+            type: FETCH_AVERAGE_DOWNLOAD_1,
+            payload: res.data
+          });
+          break;
+        case 2:
+          dispatch({
+            type: FETCH_AVERAGE_DOWNLOAD_2,
+            payload: res.data
+          });
+          break;
+        case 3:
+          dispatch({
+            type: FETCH_AVERAGE_DOWNLOAD_3,
+            payload: res.data
+          });
+          break;
+        default:
+          console.error("Fetch Ping Id not found");
+          break;
+      }
+    })
+    .catch((err) => console.log(err));
+};
+
+export const fetchAverageUpload = (id) => (dispatch) => {
+  var days = tabIdToDays(id);
+  var endDate = LocalDateToUTC(new Date());
+  var startDate = LocalDateToUTC(new Date(Date.now() - 86400 * days * 1000));
+  startDate = startDate.replace("T", " ");
+  startDate = startDate.split(".")[0];
+  endDate = endDate.replace("T", " ");
+  endDate = endDate.split(".")[0];
+  axios
+    .get(`http://localhost:8080/api/serverReport/historyData/upload/startDate=${startDate}endDate=${endDate}`)
+    .then((res) => {
+      switch (id) {
+        case 1:
+          dispatch({
+            type: FETCH_AVERAGE_UPLOAD_1,
+            payload: res.data
+          });
+          break;
+        case 2:
+          dispatch({
+            type: FETCH_AVERAGE_UPLOAD_2,
+            payload: res.data
+          });
+          break;
+        case 3:
+          dispatch({
+            type: FETCH_AVERAGE_UPLOAD_3,
+            payload: res.data
+          });
+          break;
+        default:
+          console.error("Fetch Ping Id not found");
+          break;
+      }
     })
     .catch((err) => console.log(err));
 };

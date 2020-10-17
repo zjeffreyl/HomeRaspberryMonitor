@@ -1,41 +1,23 @@
 import React, { Component } from "react";
 import { Card, CardHeader, CardTitle, CardBody, Input } from "reactstrap";
 import "chart.js";
-import { setChartToPing, setChartToDownload, setChartToUpload } from "../actions/chartAction";
+import {
+  setChartToPing, setChartToDownload, setChartToUpload
+} from "../actions/chartAction";
 import { connect } from "react-redux";
-import { LocalDateToUTC } from "../utilities/conversions";
 import PropTypes from "prop-types";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import solidGauge from "highcharts/modules/solid-gauge.js";
 
 const measurements = ["Ping", "Download", "Upload"];
-solidGauge(Highcharts);
 class DataChart extends Component {
 
   state = {
     dropDownValue: "",
-    options: {
-      title: {
-        text: ""
-      },
-      xAxis: {
-        dateTimeLabelFormats: {
-          hour: '%l %p',
-        },
-        type: 'datetime',
-        labels: {
-          overflow: 'justify'
-        }
-      },
-      time: {
-        timezoneOffset: 0
-      },
-      series: this.props.currentData
-    }
   };
 
   static propTypes = {
+    id: PropTypes.number.isRequired,
     options: PropTypes.object.isRequired,
     setChartToPing: PropTypes.func.isRequired,
     setChartToDownload: PropTypes.func.isRequired,
@@ -43,24 +25,21 @@ class DataChart extends Component {
   };
 
   componentDidMount() {
-    var current = LocalDateToUTC(new Date());
-    var tsYesterday = LocalDateToUTC(new Date(Date.now() - 86400 * 1000));
-    this.props.setChartToPing(tsYesterday, current);
+    this.props.setChartToPing(this.props.id);
   }
 
   onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
-    var current = LocalDateToUTC(new Date());
-    var tsYesterday = LocalDateToUTC(new Date(Date.now() - 86400 * 1000));
+    console.log(this.props.id);
     switch (e.target.value) {
       case "Ping":
-        this.props.setChartToPing(tsYesterday, current);
+        this.props.setChartToPing(this.props.id);
         return;
       case "Download":
-        this.props.setChartToDownload(tsYesterday, current);
+        this.props.setChartToDownload(this.props.id);
         return;
       case "Upload":
-        this.props.setChartToUpload(tsYesterday, current);
+        this.props.setChartToUpload(this.props.id);
         return;
       default:
         return;
@@ -94,10 +73,12 @@ class DataChart extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  options: state.chart.options,
-});
 
-export default connect(mapStateToProps, {
-  setChartToPing, setChartToDownload, setChartToUpload
-})(DataChart);
+function mapStateToProps(state, props) {
+  //get the correct options to display
+  return {
+    options: state.chart.chartTabsById[props.id],
+  }
+}
+
+export default connect(mapStateToProps, { setChartToPing, setChartToDownload, setChartToUpload })(DataChart);
