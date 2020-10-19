@@ -136,8 +136,8 @@ export default function (state = initialState, action) {
         ...state,
         chartTabsById: {
           ...state.chartTabsById,
-          2: {
-            ...state.chartTabsById[2],
+          1: {
+            ...state.chartTabsById[1],
             title: {
               text: "Upload"
             },

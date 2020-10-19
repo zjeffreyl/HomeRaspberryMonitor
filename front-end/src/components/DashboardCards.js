@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row, Card, CardBody, Col, CardTitle } from "reactstrap";
+import { Row, Card, CardBody, Col, Container } from "reactstrap";
 import PropTypes from "prop-types";
 import {
   fetchAveragePing,
@@ -7,6 +7,10 @@ import {
   fetchAverageUpload
 } from "../actions/serverReportActions";
 import { connect } from "react-redux";
+import pingIcon from "../assets/ping.png";
+import downloadIcon from "../assets/download.png";
+import uploadIcon from "../assets/upload.png";
+import "../App.css";
 
 class DashboardCards extends Component {
   static propTypes = {
@@ -27,14 +31,17 @@ class DashboardCards extends Component {
         <CardContent
           type="ping"
           value={this.props.ping}
+          image={pingIcon}
         />
         <CardContent
           type="download"
           value={this.props.download}
+          image={downloadIcon}
         />
         <CardContent
           type="upload"
           value={this.props.upload}
+          image={uploadIcon}
         />
       </Row>
     );
@@ -47,25 +54,29 @@ const mapStateToProps = (state, props) => ({
   upload: state.serverReports.historyData[props.id].upload
 });
 
-const CardContent = (props) => (
-  <Card>
-    <CardBody>
-      <Row>
-        <Col>
-          <div>
-            <i src="" />
-          </div>
-        </Col>
-        <Col>
-          <div>
-            <p>{props.type.charAt(0).toUpperCase() + props.type.slice(1)}</p>
-            <CardTitle>{props.value === null ? "No Data" : props.type === "ping" ? props.value + " ms" : props.value + " Mbps"}</CardTitle>
-          </div>
-        </Col>
-      </Row>
-    </CardBody>
-  </Card>
-);
+const CardContent = (props) => {
+  return (
+    <Card className="dataCard" >
+      <CardBody>
+        <Container>
+          <Row>
+            <Col className="iconCol">
+              <img src={props.image} alt="" />
+            </Col>
+            <Col>
+              <div>
+                <p className="dataTitle">{props.type.charAt(0).toUpperCase() + props.type.slice(1)}</p>
+                <div>
+                  <p className="dataValue">{props.value === null ? "No Data" : props.value}</p>
+                  <p className="dataUnit">{props.value == null ? "" : props.type === "ping" ? " ms" : " Mbps"}</p>
+                </div>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </CardBody>
+    </Card>);
+};
 
 
 

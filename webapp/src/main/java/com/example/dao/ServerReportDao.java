@@ -34,4 +34,6 @@ public interface ServerReportDao {
     Double averageDownload(Timestamp startDate, Timestamp endDate);
 
     Double averageUpload(Timestamp startDate, Timestamp endDate);
+
+    void purgeDataNDaysOld(int days);
 }

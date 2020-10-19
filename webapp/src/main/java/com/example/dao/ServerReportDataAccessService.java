@@ -160,6 +160,14 @@ public class ServerReportDataAccessService implements ServerReportDao {
         return val;
     }
 
+    @Override
+    public void purgeDataNDaysOld(int days) {
+        final String sql = "DELETE FROM server_report WHERE recorded_at < now() - interval '? days';";
+        jdbcTemplate.update(sql, new Object[]{days});
+        System.out.println("Deleted the last " + days + " days");
+    }
+
+
     public Double round(Double num, int places)
     {
         num = (double) Math.round(num * Math.pow(10, places));

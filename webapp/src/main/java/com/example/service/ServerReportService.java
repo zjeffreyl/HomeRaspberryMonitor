@@ -71,4 +71,8 @@ public class ServerReportService {
     {
         return serverReportDao.averageUpload(startDate, endDate);
     }
+
+    public void deleteDataNDaysOld(int days) {
+        serverReportDao.purgeDataNDaysOld(days);
+    }
 }

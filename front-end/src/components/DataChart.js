@@ -52,13 +52,15 @@ class DataChart extends Component {
         <Card>
           <CardHeader>
             <CardTitle md="3">
-              <Input type="select" onChange={this.onChange} name="dropDownValue" value={this.state.dropDownValue}>
-                {measurements.map((item, index) => (
-                  <option id={index} key={index}>
-                    {item}
-                  </option>
-                ))}
-              </Input>
+              <div className="w-25">
+                <Input type="select" onChange={this.onChange} name="dropDownValue" value={this.state.dropDownValue}>
+                  {measurements.map((item, index) => (
+                    <option id={index} key={index}>
+                      {item}
+                    </option>
+                  ))}
+                </Input>
+              </div>
             </CardTitle>
             <CardBody>
               <HighchartsReact

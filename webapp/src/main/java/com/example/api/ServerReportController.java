@@ -154,4 +154,10 @@ public class ServerReportController {
                 result.add(uploads);
                 return result;
         }
+
+        @GetMapping(path = "delete/days={days}")
+        @CrossOrigin(origins = "http://localhost:3000")
+        public void deleteDataNDaysOld(@PathVariable("days") int days) {
+                serverReportService.deleteDataNDaysOld(days);
+        }
 }

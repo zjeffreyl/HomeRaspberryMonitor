@@ -110,7 +110,6 @@ export const setChartToUpload = (id) => (dispatch) => {
   startDate = startDate.split(".")[0];
   endDate = endDate.replace("T", " ");
   endDate = endDate.split(".")[0];
-  console.log("upload1");
   axios
     .get(
       `http://localhost:8080/api/serverReport/timeRange/startDate=${startDate}endDate=${endDate}/`

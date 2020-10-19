@@ -12,3 +12,4 @@ public class HomeRaspberryMonitorApplication {
 		SpringApplication.run(HomeRaspberryMonitorApplication.class, args);
 	}
 }
+

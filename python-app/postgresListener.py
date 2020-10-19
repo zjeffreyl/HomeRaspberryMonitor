@@ -112,6 +112,12 @@ def refresh(my_cron):
     res = requests.get(URL)
     data = res.json()
     print(str(data))
+    purge_command = '/usr/bin/python3 {}/purgeReports.py >> {}/cron.log 2>&1'.format(
+        os.environ['PWD'], os.environ['PWD'])
+    purge_job = my_cron.new(
+        command=purge_command, comment=generate_comment("purge"))
+    purge_job.setall("0 0 * * *")
+    my_cron.write()
     for dict_item in data:
         # write an empty one to space data points
         recorded_at = datetime.datetime.now()

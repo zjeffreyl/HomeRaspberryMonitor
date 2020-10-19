@@ -50,4 +50,5 @@ public class ReportRecordController {
             @RequestBody ReportRecord reportRecord) {
         return reportRecordService.updateReportRecordById(id, reportRecord);
     }
+
 }
