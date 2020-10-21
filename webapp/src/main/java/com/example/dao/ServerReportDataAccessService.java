@@ -104,7 +104,7 @@ public class ServerReportDataAccessService implements ServerReportDao {
 
     @Override
     public List<List<Object[]>> getPerformanceDataByDate(Timestamp startDate, Timestamp endDate, UUID reportRecordId) {
-        final String sql = "SELECT * FROM server_report WHERE recorded_at >= ? AND recorded_at <= ? AND report_record_id = ?;";
+        final String sql = "SELECT * FROM server_report WHERE recorded_at >= ? AND recorded_at <= ? AND report_record_id = ? ORDER BY recorded_at;";
         ArrayList<Object[]> pings = new ArrayList<>();
         ArrayList<Object[]> downloads = new ArrayList<>();
         ArrayList<Object[]> uploads = new ArrayList<>();
@@ -162,9 +162,8 @@ public class ServerReportDataAccessService implements ServerReportDao {
 
     @Override
     public void purgeDataNDaysOld(int days) {
-        final String sql = "DELETE FROM server_report WHERE recorded_at < now() - interval '? days';";
-        jdbcTemplate.update(sql, new Object[]{days});
-        System.out.println("Deleted the last " + days + " days");
+        final String sql = "DELETE FROM server_report WHERE recorded_at < now() - interval '" +  days + "'";
+        jdbcTemplate.update(sql);
     }
 
 

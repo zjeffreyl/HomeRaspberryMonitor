@@ -46,5 +46,14 @@ services:
     depends_on:
       - raspberry-postgres
     restart: always
+
+  front-end-app:
+    container_name: raspberry-front-end
+    build: ./front-end
+    ports:
+      - 4200:80
+    links:
+      - web-app
+
 volumes:
   pg-data:

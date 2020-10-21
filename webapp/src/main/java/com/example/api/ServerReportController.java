@@ -15,6 +15,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/serverReport")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ServerReportController {
 
         private ServerReportService serverReportService;
@@ -28,31 +29,26 @@ public class ServerReportController {
         }
 
         @GetMapping
-        @CrossOrigin(origins = "http://localhost:3000")
         public Collection<ServerReport> serverReports() {
                 return serverReportService.getAllServerReports();
         }
 
         @GetMapping(path = "reportRecord/{id}")
-        @CrossOrigin(origins = "http://localhost:3000")
         public Collection<ServerReport> serverReportsFromRecordId(@PathVariable("id") UUID id) {
                 return serverReportService.getAllServerReportsByRecordId(id);
         }
 
         @PostMapping
-        @CrossOrigin(origins = "http://localhost:3000")
         public int addServerReport(@RequestBody @Valid @NotNull ServerReport report) {
                 return serverReportService.insertServerReport(report);
         }
 
         @GetMapping(path = "{id}")
-        @CrossOrigin(origins = "http://localhost:3000")
         public ServerReport getServerReportById(@PathVariable("id") UUID id) {
                 return serverReportService.getServerReportsById(id).orElse(null);
         }
 
         @DeleteMapping(path = "{id}")
-        @CrossOrigin(origins = "http://localhost:3000")
         public int deleteServerReportById(@PathVariable("id") UUID id) {
                 return serverReportService.deleteServerReportById(id);
         }
@@ -68,12 +64,12 @@ public class ServerReportController {
          * @return Latest serverReport from each record averaged
          */
         @GetMapping(path = "recentData")
-        @CrossOrigin(origins = "http://localhost:3000")
         public double[] getRecentData() {
                 List<ReportRecord> records = reportRecordService.getAllReportRecords();
                 double[] result = new double[3];
                 Arrays.fill(result, -1);
-                if(records.size() == 0) return result;
+                if (records.size() == 0)
+                        return result;
                 double sum_ping = 0;
                 double sum_download = 0;
                 double sum_upload = 0;
@@ -82,8 +78,7 @@ public class ServerReportController {
                         List<ServerReport> serverReports = serverReportService
                                         .getAllServerReportsByRecordId(record.getId());
                         int i = 0;
-                        while(i < serverReports.size() && serverReports.get(i).getPing() == null)
-                        {
+                        while (i < serverReports.size() && serverReports.get(i).getPing() == null) {
                                 i++;
                         }
                         sum_ping += serverReports.get(i).getPing();
@@ -100,32 +95,30 @@ public class ServerReportController {
         @GetMapping(path = "historyData/startDate={startDate}endDate={endDate}")
         @CrossOrigin(origins = "http://localhost:3000")
         public Double[] getHistoryData(@PathVariable("startDate") Timestamp startDate,
-                                       @PathVariable("endDate") Timestamp endDate) {
-                return new Double[]{
-                        serverReportService.getAveragePingFromStartToEnd(startDate, endDate),
-                        serverReportService.getAverageDownloadFromStartToEnd(startDate, endDate),
-                        serverReportService.getAverageUploadFromStartToEnd(startDate, endDate)
-                };
+                        @PathVariable("endDate") Timestamp endDate) {
+                return new Double[] { serverReportService.getAveragePingFromStartToEnd(startDate, endDate),
+                                serverReportService.getAverageDownloadFromStartToEnd(startDate, endDate),
+                                serverReportService.getAverageUploadFromStartToEnd(startDate, endDate) };
         }
 
         @GetMapping(path = "historyData/ping/startDate={startDate}endDate={endDate}")
         @CrossOrigin(origins = "http://localhost:3000")
-        public Double getHistoryDataPing(@PathVariable("startDate") Timestamp startDate, @PathVariable("endDate") Timestamp endDate)
-        {
+        public Double getHistoryDataPing(@PathVariable("startDate") Timestamp startDate,
+                        @PathVariable("endDate") Timestamp endDate) {
                 return serverReportService.getAveragePingFromStartToEnd(startDate, endDate);
         }
 
         @GetMapping(path = "historyData/download/startDate={startDate}endDate={endDate}")
         @CrossOrigin(origins = "http://localhost:3000")
-        public Double getHistoryDataDownload(@PathVariable("startDate") Timestamp startDate, @PathVariable("endDate") Timestamp endDate)
-        {
+        public Double getHistoryDataDownload(@PathVariable("startDate") Timestamp startDate,
+                        @PathVariable("endDate") Timestamp endDate) {
                 return serverReportService.getAverageDownloadFromStartToEnd(startDate, endDate);
         }
 
         @GetMapping(path = "historyData/upload/startDate={startDate}endDate={endDate}")
         @CrossOrigin(origins = "http://localhost:3000")
-        public Double getHistoryDataUpload(@PathVariable("startDate") Timestamp startDate, @PathVariable("endDate") Timestamp endDate)
-        {
+        public Double getHistoryDataUpload(@PathVariable("startDate") Timestamp startDate,
+                        @PathVariable("endDate") Timestamp endDate) {
                 return serverReportService.getAverageUploadFromStartToEnd(startDate, endDate);
         }
 
@@ -144,7 +137,8 @@ public class ServerReportController {
                 List<PerformanceData> downloads = new ArrayList<>();
                 List<PerformanceData> uploads = new ArrayList<>();
                 for (ReportRecord record : reportRecordService.getAllReportRecords()) {
-                        List<List<Object[]>> data = serverReportService.getPerformanceDataInTimestampRangeByRecordId(startDate, endDate, record.getId());
+                        List<List<Object[]>> data = serverReportService.getPerformanceDataInTimestampRangeByRecordId(
+                                        startDate, endDate, record.getId());
                         pings.add(new PerformanceData(record.getName(), data.get(0)));
                         downloads.add(new PerformanceData(record.getName(), data.get(1)));
                         uploads.add(new PerformanceData(record.getName(), data.get(2)));
