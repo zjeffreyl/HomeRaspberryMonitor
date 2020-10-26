@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import store from "./store";
 
 function App(props) {
+  console.log(process.env);
   return (
     <div>
       <Provider store={store}>

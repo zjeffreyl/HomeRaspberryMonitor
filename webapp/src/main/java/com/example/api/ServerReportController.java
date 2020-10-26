@@ -15,7 +15,6 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/serverReport")
-@CrossOrigin(origins = "http://localhost:4200")
 public class ServerReportController {
 
         private ServerReportService serverReportService;

@@ -65,7 +65,7 @@ const CardContent = (props) => {
             </Col>
             <Col>
               <div>
-                <p className="dataTitle">{props.type.charAt(0).toUpperCase() + props.type.slice(1)}</p>
+                <p className="dataTitle">{"Average " + props.type.charAt(0).toUpperCase() + props.type.slice(1)}</p>
                 <div className="dataValue">{props.value === null ? "No Data" : props.value}
                   <span className="dataUnit">{props.value == null ? "" : props.type === "ping" ? " ms" : " Mbps"}</span>
                 </div>

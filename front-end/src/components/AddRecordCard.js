@@ -31,6 +31,7 @@ class AddRecordCard extends Component {
 
   intervals = ["10 minutes", "15 minutes", "30 minutes", "1 hour"];
 
+
   maxNumberOfRecords = 7;
 
   static propTypes = {
@@ -111,7 +112,8 @@ class AddRecordCard extends Component {
 
   componentDidMount() {
     this.props.fetchRecords();
-    axios.get(`http://localhost:8080/api/server/`).then((res) => {
+    URL = "http://" + process.env.REACT_APP_HOST_IP_ADDRESS + ":8080/api/server";
+    axios.get(URL).then((res) => {
       const servers = res.data;
       this.setState({
         record_name: "",

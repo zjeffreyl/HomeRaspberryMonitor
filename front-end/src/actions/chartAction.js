@@ -6,6 +6,8 @@ import {
 import { LocalDateToUTC } from "../utilities/conversions"
 import { tabIdToDays } from "../utilities/constants";
 
+const URL = "http://" + process.env.REACT_APP_HOST_IP_ADDRESS + ":8080/api/serverReport";
+
 export const fetchDataFromStartToEnd = (startDate, endDate) => (dispatch) => {
   startDate = startDate.replace("T", " ");
   startDate = startDate.split(".")[0];
@@ -13,7 +15,7 @@ export const fetchDataFromStartToEnd = (startDate, endDate) => (dispatch) => {
   endDate = endDate.split(".")[0];
   axios
     .get(
-      `http://localhost:8080/api/serverReport/timeRange/startDate=${startDate}endDate=${endDate}/`
+      `${URL}/timeRange/startDate=${startDate}endDate=${endDate}/`
     )
     .then((res) => {
       dispatch({
@@ -33,7 +35,7 @@ export const setChartToPing = (id) => (dispatch) => {
   endDate = endDate.split(".")[0];
   axios
     .get(
-      `http://localhost:8080/api/serverReport/timeRange/startDate=${startDate}endDate=${endDate}/`
+      `${URL}/timeRange/startDate=${startDate}endDate=${endDate}/`
     )
     .then((res) => {
       switch (id) {
@@ -72,9 +74,7 @@ export const setChartToDownload = (id) => (dispatch) => {
   endDate = endDate.replace("T", " ");
   endDate = endDate.split(".")[0];
   axios
-    .get(
-      `http://localhost:8080/api/serverReport/timeRange/startDate=${startDate}endDate=${endDate}/`
-    )
+    .get(`${URL}/timeRange/startDate=${startDate}endDate=${endDate}/`)
     .then((res) => {
       switch (id) {
         case 1:
@@ -110,10 +110,7 @@ export const setChartToUpload = (id) => (dispatch) => {
   startDate = startDate.split(".")[0];
   endDate = endDate.replace("T", " ");
   endDate = endDate.split(".")[0];
-  axios
-    .get(
-      `http://localhost:8080/api/serverReport/timeRange/startDate=${startDate}endDate=${endDate}/`
-    )
+  axios.get(`${URL}/timeRange/startDate=${startDate}endDate=${endDate}/`)
     .then((res) => {
       switch (id) {
         case 1:

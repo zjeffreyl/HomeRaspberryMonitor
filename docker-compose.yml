@@ -1,4 +1,4 @@
-version: "3"
+version: "3.3"
 
 services:
   raspberry-postgres:
@@ -34,13 +34,16 @@ services:
     restart: always
 
   web-app:
-    build: ./webapp
+    build:
+      context: ./webapp
     container_name: raspberry-web-app
     environment:
       - DB_SERVER=raspberry-postgres
       - POSTGRES_DB=postgresdb
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
+    env_file:
+      - ./.env
     ports:
       - 8080:8080
     depends_on:
@@ -49,7 +52,12 @@ services:
 
   front-end-app:
     container_name: raspberry-front-end
-    build: ./front-end
+    build:
+      context: ./front-end
+      args:
+        - REACT_APP_HOST_IP_ADDRESS=${REACT_APP_HOST_IP_ADDRESS}
+    env_file:
+      - ./.env
     ports:
       - 4200:80
     links:

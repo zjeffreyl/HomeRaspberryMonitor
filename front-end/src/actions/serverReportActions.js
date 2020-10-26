@@ -17,9 +17,11 @@ import axios from "axios";
 import { LocalDateToUTC } from "../utilities/conversions";
 import { tabIdToDays } from "../utilities/constants";
 
+const URL = "http://" + process.env.REACT_APP_HOST_IP_ADDRESS + ":8080/api/serverReport";
+
 export const fetchServerReports = () => (dispatch) => {
   axios
-    .get(`http://localhost:8080/api/serverReport`)
+    .get(URL)
     .then((res) => {
       dispatch({
         type: FETCH_SERVER_REPORTS,
@@ -32,7 +34,7 @@ export const fetchServerReports = () => (dispatch) => {
 export const deleteServerReports = (id) => (dispatch) => {
   console.log(id);
   axios
-    .delete(`http://localhost:8080/api/serverReport/${id}`)
+    .delete(`${URL}/${id}`)
     .then((res) => {
       dispatch({
         type: DELETE_SERVER_REPORTS,
@@ -44,7 +46,7 @@ export const deleteServerReports = (id) => (dispatch) => {
 
 export const fetchRecentData = () => (dispatch) => {
   axios
-    .get(`http://localhost:8080/api/serverReport/recentData`)
+    .get(`${URL}/recentData`)
     .then((res) => {
       dispatch({
         type: FETCH_RECENT_DATA,
@@ -63,7 +65,7 @@ export const fetchAveragePing = (id) => (dispatch) => {
   endDate = endDate.replace("T", " ");
   endDate = endDate.split(".")[0];
   axios
-    .get(`http://localhost:8080/api/serverReport/historyData/ping/startDate=${startDate}endDate=${endDate}`)
+    .get(`${URL}/historyData/ping/startDate=${startDate}endDate=${endDate}`)
     .then((res) => {
       switch (id) {
         case 1:
@@ -101,7 +103,7 @@ export const fetchAverageDownload = (id) => (dispatch) => {
   endDate = endDate.replace("T", " ");
   endDate = endDate.split(".")[0];
   axios
-    .get(`http://localhost:8080/api/serverReport/historyData/download/startDate=${startDate}endDate=${endDate}`)
+    .get(`${URL}/historyData/download/startDate=${startDate}endDate=${endDate}`)
     .then((res) => {
       switch (id) {
         case 1:
@@ -139,7 +141,7 @@ export const fetchAverageUpload = (id) => (dispatch) => {
   endDate = endDate.replace("T", " ");
   endDate = endDate.split(".")[0];
   axios
-    .get(`http://localhost:8080/api/serverReport/historyData/upload/startDate=${startDate}endDate=${endDate}`)
+    .get(`${URL}/historyData/upload/startDate=${startDate}endDate=${endDate}`)
     .then((res) => {
       switch (id) {
         case 1:
@@ -170,7 +172,7 @@ export const fetchAverageUpload = (id) => (dispatch) => {
 
 export const fetchLatestReportTimestamp = () => (dispatch) => {
   axios
-    .get(`http://localhost:8080/api/serverReport/lastRecordedDate`)
+    .get(`${URL}/lastRecordedDate`)
     .then((res) => {
       dispatch({
         type: FETCH_LATEST_REPORT_TIMESTAMP,

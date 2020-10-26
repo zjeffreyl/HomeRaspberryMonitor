@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.UUID;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/reportRecord")
 public class ReportRecordController {
     private ReportRecordService reportRecordService;

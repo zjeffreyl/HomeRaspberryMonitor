@@ -1,9 +1,12 @@
 import { FETCH_RECORDS, NEW_RECORD, DELETE_RECORD } from "./types";
 import axios from "axios";
 
+const URL = "http://" + process.env.REACT_APP_HOST_IP_ADDRESS + ":8080/api/reportRecord";
+
 export const fetchRecords = () => (dispatch) => {
+  console.log(URL);
   axios
-    .get(`http://localhost:8080/api/reportRecord`)
+    .get(URL)
     .then((res) => {
       dispatch({
         type: FETCH_RECORDS,
@@ -15,7 +18,7 @@ export const fetchRecords = () => (dispatch) => {
 
 export const createRecord = (recordData) => (dispatch) => {
   axios
-    .post(`http://localhost:8080/api/reportRecord`, recordData)
+    .post(URL, recordData)
     .then((res) => {
       dispatch({
         type: NEW_RECORD,
@@ -27,7 +30,7 @@ export const createRecord = (recordData) => (dispatch) => {
 
 export const deleteRecord = (id) => (dispatch) => {
   axios
-    .delete(`http://localhost:8080/api/reportRecord/${id}`)
+    .delete(`${URL}/${id}`)
     .then((res) => {
       dispatch({
         type: DELETE_RECORD,

@@ -11,7 +11,7 @@ import java.util.Collection;
 
 @RestController
 @RequestMapping("/api/server")
-@CrossOrigin("http://localhost:4200")
+@CrossOrigin(origins="http://192.168.0.224:4200")
 public class ServerController {
     private ServerService serverService;
 

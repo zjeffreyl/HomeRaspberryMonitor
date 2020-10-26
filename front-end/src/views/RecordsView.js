@@ -9,7 +9,9 @@ class RecordsView extends Component {
   };
 
   componentDidMount() {
-    axios.get(`http://localhost:8080/api/server/`).then((res) => {
+    const URL = "http://" + process.env.REACT_APP_HOST_IP_ADDRESS + ":8080/api/server";
+
+    axios.get(URL).then((res) => {
       const servers = res.data;
       this.setState({
         servers: servers,
